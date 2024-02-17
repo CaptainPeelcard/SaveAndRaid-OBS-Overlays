@@ -1,0 +1,157 @@
+@font-face {
+    font-family: "Arial Narrow 7";
+    src: url('../fonts/arial_narrow_7.ttf');
+}
+
+:root {
+    --save-purple: #6A00B0;
+    --save-teal: #00DEE5;
+
+    --black: #000;
+    --black-hexa: #00000000;
+    --black-rgb: rgb(0,0,0);
+    --black-rgba: rgba(0,0,0,1);
+    --black-translucent-hexa: #000000fb;
+    --black-translucent-rgba: rgba(0,0,0,0.99);
+
+    --gray-09: #090909;
+    --gray-09-hexa: #090909ff;
+    --gray-09-rgb: rgb(9,9,9);
+    --gray-09-rgba: rgba(9,9,9,1);
+    --gray-09-translucent-hexa: #090909fa;
+    --gray-09-translucent-rgba: rgba(9,9,9,0.98);
+
+    --gray-seek: #454545;
+    --gray-seek-hexa: #454545ff;
+    --gray-seek-rgb: rgb(69,69,69);
+    --gray-seek-rgba: rgb(69,69,69,1);
+    --gray-seek-translucent-hexa: #454545fa;
+    --gray-seek-translucent-rgba: rgba(69,69,69, 0.98);
+
+    --gray-98: #626262;
+    --gray-98-hexa: #626262ff;
+    --gray-98-rgb: rgb(98,98,98);
+    --gray-98-rgba: rgba(98,98,98,1);
+    --gray-98-translucent-hexa: #626262f2;
+    --gray-98-translucent-rgba: rgba(98,98,98,0.95);
+
+    --gray-150: #969696;
+    --gray-150-hexa: #969696ff;
+    --gray-150-rgb: rgb(150,150,150);
+    --gray-150-rgba: rgba(150,150,150,1);
+    --gray-150-translucent-hexa: #969696fa;
+    --gray-150-translucent-rgba: rgba(150,150,150,0.98);
+}
+
+    /* 2024 - Follow the Freeman */
+[data-theme~="2024"] {
+/* ---------------------------- CORE THEME VARIABLES ---------------------------- */
+    --theme-banner: url("../images/2024_freeman_banner.svg");
+    --theme-splash: url("../images/2024_freeman_splash.svg");
+    --theme-logo: url("../images/2024_freeman_logo.svg");
+    --theme-alert-gif: url("../images/2024_freeman_donation_alert.gif");
+
+    --theme-font-primary: "Arial";
+    --theme-font-secondary: "Arial Narrow 7";
+
+    --theme-color-primary: #e0922f;
+    --theme-color-primary-hexa: #e0922fff;
+    --theme-color-primary-rgb: rgb(224, 146, 47);
+    --theme-color-primary-rgba: rgba(224, 146, 47, 1);
+    --theme-color-primary-translucent-hexa: #e0922ff2;
+    --theme-color-primary-translucent-rgba: rgba(224, 146, 47, 0.95);
+    
+    --theme-accent-primary: #ff4500;
+    --theme-accent-primary-hexa: #ff4500ff;
+    --theme-accent-primary-rgb: rgb(255,69,0);
+    --theme-accent-primary-rgba: rgba(255,69,0,1);
+    --theme-accent-primary-translucent-hexa: #ff4500fa;
+    --theme-accent-primary-translucent-rgba: rgba(255,69,0,0.98);
+    --theme-accent-primary-super-translucent-rgba: rgba(255,69,0,0.25);
+
+    --theme-color-secondary: var(--black);
+    --theme-color-secondary-hexa: var(--black-hexa);
+    --theme-color-secondary-rgb: var(--black-rgb);
+    --theme-color-secondary-rgba: var(--black-rgba);
+    --theme-color-secondary-translucent-hexa: var(--black-translucent-hexa);
+    --theme-color-secondary-translucent-rgba: var(--black-translucent-rgba);
+    /* --theme-accent-secondary: ; */
+
+    --theme-color-tertiary: #E9E9E9;
+    --theme-color-tertiary-hexa: #E9E9E9ff;
+    --theme-color-tertiary-rgb: rgb(233, 233, 233);
+    --theme-color-tertiary-rgba: rgba(233, 233, 233, 1);
+    --theme-color-tertiary-translucent-hexa: #E9E9E9fa;
+    --theme-color-tertiary-translucent-rgba: rgba(233, 233, 233, 0.98);
+    /* --theme-accent-tertiary: ; */
+
+/* ---------------------------- PANEL STYLING THEME VARIABLES ---------------------------- */
+    --titlePanel-sm-font-size: 1rem;
+    --titlePanel-font: var(--theme-font-secondary);
+    --titlePanel-text-color: var(--theme-color-primary);
+    --titlePanel-background-color: var(--theme-color-secondary-rgba);
+    --titlePanel-gradient-color: var(--theme-color-primary-rgba);
+    --infoPanel-text-color: var(--theme-color-secondary-rgba);
+    --infoPanel-background-color: var(--theme-color-primary-rgba);
+    --infoPanel-gradient-color: var(--gray-98-translucent-rgba);
+    --infoPanel-container-border-color: var(--theme-color-primary-rgba);
+    --infoPanel-container-border-style: solid;
+    --infoPanel-container-border-width: 2px;
+        /* infoPanel height in alert mode */
+    --infoPanel-alert-height: 70px;
+
+/* ---------------------------- DONATION INFO (ALERTS/LEADERBOARD) THEME VARIABLES ---------------------------- */
+    --donationTotal-font: var(--theme-font-secondary);
+    --donationTotal-font-stroke-color: var(--theme-accent-primary-rgba);
+    --donationTotal-font-stroke-width: 0.5px;
+    --donationTotal-sm-font-size: 1rem;
+    --donationTotal-sm-font-stroke-width: 0.4px;
+
+    --donationName-font: var(--theme-font-primary);
+    --donationName-font-stroke-color: var(--theme-accent-primary-rgba);
+    --donationName-font-stroke-width: 0.5px;
+    --donationName-sm-font-size: 1rem;
+    --donationName-sm-font-stroke-width: 0.4px;
+
+    --donationMessage-font: var(--theme-font-secondary);
+    --donationMessage-font-stroke-color: var(--theme-accent-primary-rgba);
+    --donationMessage-font-stroke-width: 0.3px;
+    --donationMessage-sm-font-size: 0.5rem;
+    --donationMessage-sm-font-stroke-width: 0.2px;
+
+/* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
+    --progressBar-font: var(--theme-font-primary);
+    --progressBar-text-color: var(--theme-color-tertiary);
+    --progressBar-background-color: var(--theme-color-secondary);
+    --progressBar-raisedAmount-text-color: var(--theme-color-primary);
+    --progressBar-milestoneAmount-text-color: var(--theme-accent-primary);
+    --progressBar-goalAmount-text-color: rgb(69,169,69);
+    --progressBar-progress-empty-background-color: var(--theme-color-secondary-rgba);
+    --progressBar-progress-empty-background-gradient-top: var(--theme-color-secondary-rgba);
+    --progressBar-progress-empty-background-gradient-middle: var(--gray-seek-rgba);
+    --progressBar-progress-empty-background-gradient-bottom: var(--theme-color-primary);
+    --progressBar-progress-font: var(--theme-font-secondary);
+    --progressBar-progress-raised-text-color: var(--theme-color-secondary);
+    --progressBar-progress-raised-background-color: var(--theme-color-primary);
+    --progressBar-progress-milestone-text-color: var(--theme-color-tertiary);
+    --progressBar-progress-milestone-background-color: var(--theme-accent-primary-super-translucent-rgba);
+}
+
+    /* 2024 - Follow the Freeman (transparent) */
+[data-theme~="2024-transparent"] {
+/* ---------------------------- PANEL STYLING TRANSPARENT THEME VARIABLES ---------------------------- */
+    --titlePanel-background-color: var(--theme-color-secondary-translucent-rgba);
+    --titlePanel-gradient: var(--theme-color-primary-translucent-rgba);
+    --infoPanel-container-border-color: var(--theme-color-primary-translucent-rgba);
+
+/* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
+    --progressBar-background-color: var(--theme-color-secondary-translucent-rgba);
+}
+
+    /* Disabled animations */
+[data-theme~="no-animate"] {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}

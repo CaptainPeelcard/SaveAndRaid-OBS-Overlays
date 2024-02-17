@@ -1,0 +1,71 @@
+{
+    "defaults":
+    {
+        "theme": "2024",
+        "mode": "alerts",
+        "position": "top",
+        "transparency": true,
+        "animations": true,
+        "sounds": true,
+        "test": false,
+        "soundPlayInterval": 60000
+    },
+    "alertSounds": [
+        {
+            "year": "*",
+            "alerts": [
+                {
+                    "alertType": "donation",
+                    "url": "../sounds/broadside_raising_money.wav"
+                },
+                {
+                    "alertType": "milestone",
+                    "url": "../sounds/broadside_raising_money.wav"
+                }
+            ]
+        },
+        {
+            "year": "2024",
+            "alerts": [
+                {
+                    "alertType": "donation",
+                    "url": "../sounds/hev_donation_received.mp3"
+                },
+                {
+                    "alertType": "milestone",
+                    "url": "../sounds/hev_milestone_achieved.mp3"
+                }
+            ]
+        }
+    ],
+    "api":
+    {
+        "apiKey": "",
+        "endpoints": [
+            {
+                "name": "campaign_events",
+                "url": ""
+            },
+            {
+                "name": "donations",
+                "url": ""
+            },
+            {
+                "name": "donation_leaderboard",
+                "url": ""
+            },
+            {
+                "name": "milestones",
+                "url": ""
+            },
+            {
+                "name": "participants",
+                "url": ""
+            },
+            {
+                "name": "schedule",
+                "url": ""
+            }
+        ]
+    }
+}

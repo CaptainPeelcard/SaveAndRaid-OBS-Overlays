@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale=1.0">
+    <title>Save & Raid - Donation Alerts</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/donation_alerts.css">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="./images/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./images/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./images/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./images/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./images/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./images/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="./images/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./images/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/icons/favicon-16x16.png">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="msapplication-TileColor" content="#6A00B0">
+    <meta name="msapplication-TileImage" content="./images/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#00DEE5">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script defer src="./scripts/_HelperFunctions.js"></script>
+    <script defer src="./scripts/_Settings.js"></script>
+    <script defer src="./scripts/donation_alerts.js?v=makeitso"></script>
+    <script defer>
+        $(document).ready(async () => {
+                // Set to resize widget to window size when it loads data the first time.
+            fitToWindow = true;
+                // Load settings and choices.
+            await LoadSettings();
+                // Set theme choice.
+            SetTheme();
+
+            if (mode === "alerts") {
+                $("#donationsTitle").css("display", "none");
+                $("#donationsContainer").css("border", "none");
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Start widget.
+            if (isTest === true)
+                TestDonations(mode);
+            else
+                SubscribeDonations(mode, null);
+        });
+
+            // Update widget size if window is resized.
+        $(window).resize(async () => {
+            if (fitToWindow === true)
+                donationPanelQuantity = await ResizeDonations();
+        });
+    </script>
+</head>
+<body class="d-flex overflow-hidden vh-100 vw-100">
+    <div id="donations" class="justify-content-center w-100">
+        <div class="mx-2 mb-2 px-1">
+            <div id="donationsTitle" class="titlePanel row justify-content-center text-center py-1 fs-1 fw-bolder">
+                DONATIONS
+            </div>
+            <div id="donationsContainer" class="infoPanelContainer row">
+                <div id="donationPanels" class="d-flex flex-column align-items-center justify-content-top w-100 px-1"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

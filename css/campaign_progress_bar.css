@@ -1,0 +1,144 @@
+@import "theme.css";
+@import "animations.css";
+
+.theme-banner-lg, .theme-banner-sm, .theme-splash, .theme-logo-lg, .theme-logo-sm {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.theme-logo-lg, .theme-logo-sm {
+    background-image: var(--theme-logo);
+}
+
+.theme-banner-lg, .theme-banner-sm {
+    background-image: var(--theme-banner)
+}
+
+.theme-splash {
+    background-image: var(--theme-splash);
+}
+
+#progressBar {
+    font-family: var(--progressBar-font);
+    color: var(--progressBar-text-color);
+    background-color: var(--progressBar-background-color);
+    min-width: 200px;
+    min-height: 50px;
+}
+
+#raisedAmount {
+    color: var(--progressBar-raisedAmount-text-color);
+}
+
+#milestoneAmount {
+    color: var(--progressBar-milestoneAmount-text-color);
+}
+
+#goalAmount {
+    color: var(--progressBar-goalAmount-text-color);
+}
+
+.progress {
+    background: var(--progressBar-progress-empty-background-color);
+    background: linear-gradient(
+        180deg,
+        var(--progressBar-progress-empty-background-gradient-top) 15%,
+        var(--progressBar-progress-empty-background-gradient-middle) 69%,
+        var(--progressBar-progress-empty-background-gradient-bottom) 100%);
+}
+
+.raisedProgress {
+    font-family: var(--progressBar-progress-font);
+    color: var(--progressBar-progress-raised-text-color);
+    background-color: var(--progressBar-progress-raised-background-color);
+}
+
+.milestoneProgress {
+    font-family: var(--progressBar-progress-font);
+    color: var(--progressBar-progress-milestone-text-color);
+    background-color: var(--progressBar-progress-milestone-background-color);
+    transform: rotate(180deg);
+}
+
+.milestoneProgress > span {
+    transform: rotate(180deg);
+}
+
+
+@media (min-width: 1000) {
+    .theme-banner-lg {
+        display: block;
+    }
+
+    .theme-banner-sm, .theme-splash, .theme-logo-lg, .theme-logo-sm {
+        display: none;
+    }
+}
+
+@media (max-width: 999px) {
+    .theme-banner-sm {
+        display: block;
+    }
+
+    .theme-banner-lg, .theme-splash, .theme-logo-lg, .theme-logo-sm {
+        display: none;
+    }
+}
+
+@media (max-width: 719px) {
+    .theme-splash {
+        display: block;
+    }
+
+    .theme-banner-lg, .theme-banner-sm, .theme-logo-lg, .theme-logo-sm {
+        display: none;
+    }
+}
+
+@media (max-width: 620px) {
+    .theme-logo-lg {
+        display: block;
+    }
+
+    .theme-banner-lg, .theme-banner-sm, .theme-splash, .theme-logo-sm {
+        display: none;
+    }
+
+    .title, .total {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .theme-logo-sm {
+        display: block;
+    }
+
+    .theme-banner-lg, .theme-banner-sm, .theme-splash, .theme-logo-lg {
+        display: none;
+    }
+    
+    .milestoneInfo {
+        display: none;
+    }
+
+    .milestoneProgress {
+        display: none;
+    }
+
+    #goalAmount {
+        color: var(--theme-color-primary);
+    }
+}
+
+@media (max-width: 250px) {
+    .progress {
+        display: none;
+    }
+
+    .title, .total {
+        font-size: 0.69rem;
+        width: 50%;
+    }
+}

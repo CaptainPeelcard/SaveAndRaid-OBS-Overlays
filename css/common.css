@@ -1,0 +1,53 @@
+    /* Hide scrollbar for Chrome, Safari and Opera */
+-webkit-scrollbar {
+    display: none !important;
+}
+*, .infoPanelContainer {
+        /* IE and Edge scrollbar*/
+   -ms-overflow-style: none !important;
+        /* Firefox scrollbar */
+    scrollbar-width: none !important;
+}
+
+.infoPanelContainer {
+    overflow: hidden;
+    border-color: var(--infoPanel-container-border-color);
+    border-width: var(--infoPanel-container-border-width);
+    border-style: var(--infoPanel-container-border-style);
+}
+
+.titlePanel {
+    font-family: var(--titlePanel-font);
+    color: var(--titlePanel-text-color);
+    background: linear-gradient(180deg, var(--titlePanel-background-color) 69%, var(--titlePanel-gradient-color) 100%);
+}
+
+.infoPanel {
+    color: var(--infoPanel-text-color);
+    background-color: var(--infoPanel-background-color);
+    display: none;
+}
+
+.donationTotal
+{
+    font-family: var(--donationTotal-font);
+    -webkit-text-stroke-color: var(--donationTotal-font-stroke-color);
+    -webkit-text-stroke-width: var(--donationTotal-font-stroke-width);
+}
+
+.donationName {
+    font-family: var(--donationName-font);
+    -webkit-text-stroke-color: var(--donationName-font-stroke-color);
+    -webkit-text-stroke-width: var(--donationName-font-stroke-width);
+}
+
+.donationMessage {
+    color: var(--infoPanel-text-color);
+    font-family: var(--donationMessage-font);
+    -webkit-text-stroke-color: var(--donationMessage-font-stroke-color);
+    -webkit-text-stroke-width: var(--donationMessage-font-stroke-width);
+}
+
+blockquote, figure, figcaption {
+    margin: 0px !important;
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale=1.0">
+    <title>Save & Raid - Campaign Prgress Bar</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/campaign_progress_bar.css">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="./images/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./images/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./images/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./images/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./images/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./images/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="./images/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./images/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/icons/favicon-16x16.png">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="msapplication-TileColor" content="#6A00B0">
+    <meta name="msapplication-TileImage" content="./images/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#00DEE5">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script defer src="./scripts/_HelperFunctions.js"></script>
+    <script defer src="./scripts/_Settings.js"></script>
+    <script defer src="./scripts/campaign_progress_bar.js"></script>
+    <script defer src="./scripts/milestones.js"></script>
+    <script defer>
+        $(document).ready(async () => {
+                // Load settings and choices.
+            await LoadSettings();
+                // Set theme choice.
+            SetTheme();
+                // Set layout.
+            SetProgressLayout(position);
+
+                // Start the widget.
+            if (isTest === true)
+                TestProgressBar();
+            else
+                SubscribeCampaignProgress();
+        });
+    </script>
+</head>
+<body class="overflow-hidden d-flex vh-100">
+    <div id="progressBar" class="py-1 px-3">
+        <div class="row">
+            <div class="theme-logo-sm col-3 m-1"></div>
+            <div class="theme-logo-lg col-2 m-1"></div>
+            <div class="theme-splash col-2 m-1"></div>
+            <div class="theme-banner-sm col-4 m-1"></div>
+            <div class="theme-banner-lg col-3 mx-1"></div>
+            <div id="campaignInfo" class="col">
+                <div class="row mt-1 px-3">
+                    <div class="raisedInfo title col px-2 text-center justify-content-center">RAISED:</div>
+                    <div class="milestoneInfo title col px-2 text-center justify-content-center">NEXT MILESTONE:</div>
+                    <div class="goalInfo title col px-2 text-center justify-content-center">GOAL:</div>
+                </div>
+                <!-- Progress bar gets inserted above or below info based on position URLparameter. Use SetProgressLayout() in UpdateProgressBar.js -->
+                <div class="row mb-1 px-3">
+                    <div id="raisedAmount" class="raisedInfo total col px-2 text-center justify-content-center">$0</div>
+                    <div id="milestoneAmount" class="milestoneInfo total col px-2 text-center justify-content-center">$0</div>
+                    <div id="goalAmount" class="goalInfo total col px-2 text-center justify-content-center">$0</div>
+                </div>
+                <!-- Progress bar gets inserted above or below info based on position URLparameter. Use SetProgressLayout() in UpdateProgressBar.js -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

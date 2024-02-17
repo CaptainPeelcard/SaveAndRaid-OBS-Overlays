@@ -1,0 +1,66 @@
+@import "theme.css";
+@import "common.css";
+@import "animations.css";
+
+#donations {
+    min-width: 100px;
+}
+
+#donationPanels, #donationsContainer {
+    overflow: hidden;
+}
+
+#donationPanels.--webkit-scrollbar {
+    display: none !important;
+}
+
+.donationText {
+    color: var(--infoPanel-text-color)
+}
+
+div.donationTotal, div.donationName {
+    display: none !important;
+}
+
+@media (max-width: 249px) {
+    #donationsTitle {
+        font-size: var(--titlePanel-sm-font-size) !important;
+    }
+
+    .donationTotal {
+        font-size: var(--donationTotal-sm-font-size) !important;
+        -webkit-text-stroke-width: var(--donationTotal-sm-font-stroke-width) !important;
+    }
+    
+    .donationName {
+        font-size: var(--donationName-sm-font-size) !important;
+        -webkit-text-stroke-width: var(--donationName-sm-font-stroke-width) !important;
+    }
+
+    .donationMessage {
+        font-size: var(--donationMessage-sm-font-size) !important;
+        -webkit-text-stroke-width: var(--donationMessage-sm-font-stroke-width) !important;
+    }
+}
+
+@media (max-width:200px) {
+    span.donationTotal, .donationText, .divider, .donationMessage {
+        display: none !important;
+    }
+
+    div.donationTotal {
+        display: flex !important;
+        /*width: 25% !important;*/
+        width: 100% !important;
+        font-size: var(--donationTotal-sm-font-size) !important;
+        -webkit-text-stroke-width: var(--donationTotal-sm-font-stroke-width) !important;
+        text-decoration: underline !important;
+    }
+
+    div.donationName {
+        display: flex !important;
+        width: 100% !important;
+        font-size: var(--donationName-sm-font-size) !important;
+        -webkit-text-stroke-width: var(--donationName-sm-font-stroke-width) !important;
+    }
+}
