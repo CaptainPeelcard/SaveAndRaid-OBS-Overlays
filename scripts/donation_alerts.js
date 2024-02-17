@@ -177,7 +177,7 @@ async function UpdateDonations(donations) {
                     : parseInt(donationSoundLastPlayed, 10);
     
                     // Play sound if sound is enabled, the below conversion of autoPlay to string is a wienrd bug that only happens in OBS. Other browsers see this globally as a bool as expected.            
-                if (audioEnabled.toLocaleString() === "true" && donationSoundLastPlayed + soundPlayInterval <= Date.now()) {
+                if (audioEnabled === true && donationSoundLastPlayed + soundPlayInterval <= Date.now()) {
                     donationSound.play();
                     donationSoundLastPlayed = Date.now();
                     localStorage.setItem("donationSoundLastPlayed", donationSoundLastPlayed);

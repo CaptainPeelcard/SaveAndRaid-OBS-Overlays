@@ -1,3 +1,12 @@
+// Environment
+        // Play sounds if enabled, once user has interacted with page, or browser type is OBS.
+    let audioEnabled;
+
+    $(document).on("click keydown focus touchstart", () => {
+        audioEnabled = sounds;
+        $(document).prop("onclick onkeydown onfocus ontouchstart", null).off("click keydown focus touchstart");
+    });
+
 // Page/widget settings
         // Set this to true in page script if this widget should resize itself to the window dimensions when it loads data the first time.
     let fitToWindow = false;
@@ -94,35 +103,30 @@
             // Get choice to play sounds. Default is enabled. Pull from local stroage if exists. Only set to local storage from toggle switch on dashboard.
         sounds = !sounds || !sounds.trim()
             ? localStorage.getItem("sounds") === null
-                ? settings.defaults.sounds
-                : localStorage.getItem("sounds")
             : sounds.toLowerCase() === "true";
-
+            
+        sounds = !sounds || !sounds.toString().trim()     
+            ? settings.defaults.sounds
+            : sounds;
+            
             // Get user choice to enable or disable animations. Default is enabled. Pull from local storage if exists. Only set to local storage from toggle switch on dashboard.
-        animations = !animations || !animations.trim()
+        /* animations = !animations || !animations.trim()
             ? localStorage.getItem("animations") === null
-                ? settings.defaults.animations
-                : localStorage.getItem("animations")
-            : animations.toLowerCase() === "true";
-
+            ? settings.defaults.animations
+            : localStorage.getItem("animations")
+            : animations.toLowerCase() === "true"; */
+            
             // Get transparency choice for background. Default is enabled.
         transparency = !transparency || !transparency.trim()
             ? settings.defaults.transparency
             : transparency.toLowerCase() === "true";
             
             // Start test or get real data? Default is false.
-        isTest = !isTest || !isTest.trim()
+            isTest = !isTest || !isTest.trim()
             ? settings.defaults.test
             : isTest.toLowerCase() === "true";
+
+        audioEnabled = navigator.userAgent.indexOf("OBS") >= 0
+            ? sounds
+            : false;      
     }
-
-// Environment
-        // Play sounds if enabled, once user has interacted with page, or browser type is OBS.
-    let audioEnabled = navigator.userAgent.indexOf("OBS") >= 0
-        ? sounds
-        : false;
-
-    $(document).on("click keydown touchstart", () => {
-        autoPlay = sounds;
-        $(document).prop("onclick onkeydown ontouchstart", null).off("click keydown touchstart");
-    });
