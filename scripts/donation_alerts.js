@@ -191,6 +191,7 @@ async function UpdateDonations(donations) {
 
                     // Don't await final exit animations
                 setTimeout(() => {
+                    if (animations === true) {
                             // Fade out child text elements
                         $(`#${donation.guid}`).children().each((index, childData) => {
                             $(childData).css({
@@ -232,9 +233,11 @@ async function UpdateDonations(donations) {
                             });
                         }, 100);
                         
-                    setTimeout(() => {
-                        $(`#${donation.guid} > .alert-exit`).css("display", "none");
-                    }, 1000);
+                        setTimeout(() => {
+                            $(`#${donation.guid} > .alert-exit`).css("display", "none");
+                        }, 1000);
+
+                    }
                     setTimeout(() => {
                         $(`#${donation.guid}`).remove();
                     }, 2500);

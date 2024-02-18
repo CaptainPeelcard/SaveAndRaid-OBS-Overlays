@@ -13,13 +13,13 @@ You can find more information and news at https://saveandraid.org/
 **Overlay Pages:**
   - **Campaign Progress Bar:**
     - URL: https://alerts.saveandraid.org/campaign_progress_bar.html
-    - URL Parameters: position, transparent, test, theme
+    - URL Parameters: position, transparent, animations, theme, test
   - **Donation Alerts:**
     - URL: https://alerts.saveandraid.org/donation_alerts.html
-    - URL Parameters: transparent, test, theme
+    - URL Parameters: transparent, animations, theme, test
   - **Donation Leaderboard:**
     - URL: https://alerts.saveandraid.org/donation_leaderboard.html
-    - URL Parameters: mode, sounds, transparent, test, theme
+    - URL Parameters: mode, sounds, transparent, animations, theme, test
  
 **Adding Overlays To OBS Scenes**
   1. Copy the desired URL for the wideet you want to add from the links above.
@@ -43,15 +43,18 @@ You can find more information and news at https://saveandraid.org/
   - transparency: 
       - Description: Enables or disables the alpha transparency on the black title panels and progress bar background.
       - Values: "true", "false" (Default is true if not specified).
+  - animations:
+      - Description: Enables or disables the playing of animations and transitions.
+      - Values: "true", "false" (Default is true if not specified).
   - mode:
       - Description: This applies to the alert widget. Runs the widget in history or alert mode. Alert mode will display a sound and animation for newly received donations, while history will show recent donations and update them as they change.
       - Values: "alerts", "history" (Default is alerts if not specified).
-  - test
-      - Description: Runs widget in test mode or with live data.
-      - Values: "true", "false" (Default is false if not specified).
   - theme
       - Description: This sets the style/theme created specially for each year's event. This is automatically specified in the defaults for each year and does not need to be specified.
       - Values: {{year}}
+  - test
+      - Description: Runs widget in test mode or with live data.
+      - Values: "true", "false" (Default is false if not specified).
 
 ### Examples
 1. Campaign Progress Bar:

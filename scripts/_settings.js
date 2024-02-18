@@ -114,8 +114,6 @@
         animations = !animations || !animations.trim()
             ? settings.def
             : animations.toLowerCase() === "true";
-
-        console.log(animations);
             
             // Get transparency choice for background. Default is enabled.
         transparency = !transparency || !transparency.trim()

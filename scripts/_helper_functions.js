@@ -28,8 +28,8 @@ function SetTheme(overrideTransparency = false) {
     let dataTheme = theme;
     if (transparency === true || overrideTransparency === true)
         dataTheme = `${dataTheme} ${theme}-transparent`;
-    /* if (animations === false)
-        dataTheme = `${dataTheme} no-animate`; */
+    if (animations === false)
+        dataTheme = `${dataTheme} no-animate`;
 
         document.documentElement.setAttribute("data-theme", dataTheme);
 }
