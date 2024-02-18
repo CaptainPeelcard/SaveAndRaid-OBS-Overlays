@@ -188,10 +188,9 @@ async function UpdateDonations(donations) {
 
                     // Show the panel if it will fit. Delay it to line up with the entracne of updated panel animations.
                 $(`#${donation.guid}`).css("display", "flex");
-                
+
                     // Don't await final exit animations
                 setTimeout(() => {
-                    if (animations === true) {
                             // Fade out child text elements
                         $(`#${donation.guid}`).children().each((index, childData) => {
                             $(childData).css({
@@ -199,7 +198,7 @@ async function UpdateDonations(donations) {
                                 "opacity": 0
                             });
                         });
-                        
+                    
                             // Update all elements with
                         $(`#${donation.guid}`).prepend(
                             $("<div class='alert-exit'>")
@@ -213,7 +212,7 @@ async function UpdateDonations(donations) {
                                 "width": "100%"
                             })
                         );
-                            
+                        
                         setTimeout(() => {
                             $(`#${donation.guid} > .alert-exit`).css({
                                 "transition": "all 1000ms ease-in-out",
@@ -232,8 +231,6 @@ async function UpdateDonations(donations) {
                                 "background-position": "center"
                             });
                         }, 100);
-
-                    }
                         
                     setTimeout(() => {
                         $(`#${donation.guid} > .alert-exit`).css("display", "none");
