@@ -105,15 +105,18 @@
             ? localStorage.getItem("sounds")
             : sounds.toLowerCase() === "true";
             
-        sounds = !sounds || !sounds.toString().trim()     
+        sounds = sounds === null
             ? settings.defaults.sounds
-            : sounds.toLowerCase() === "true";
+            : sounds.toString().toLowerCase() === "true";
             
-            //TODO only override from dashboard, issue getting from local storage here and comparing with URL parameter.
             // Get user choice to enable or disable animations. Default is enabled. Pull from local storage if exists. Only set to local storage from toggle switch on dashboard.
         animations = !animations || !animations.trim()
-            ? settings.def
+            ? localStorage.getItem("animations")
             : animations.toLowerCase() === "true";
+
+        animations = animations === null
+            ? settings.defaults.animations
+            : animations.toString().toLowerCase() === "true";
             
             // Get transparency choice for background. Default is enabled.
         transparency = !transparency || !transparency.trim()
@@ -121,9 +124,9 @@
             : transparency.toLowerCase() === "true";
             
             // Start test or get real data? Default is false.
-            isTest = !isTest || !isTest.trim()
-            ? settings.defaults.test
-            : isTest.toLowerCase() === "true";
+        isTest = !isTest || !isTest.trim()
+        ? settings.defaults.test
+        : isTest.toLowerCase() === "true";
 
         audioEnabled = navigator.userAgent.indexOf("OBS") >= 0
             ? sounds
