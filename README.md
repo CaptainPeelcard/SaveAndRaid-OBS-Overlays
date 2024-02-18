@@ -26,7 +26,7 @@ You can find more information and news at https://saveandraid.org/
   2. In the scene you want to add your widget to, click the + button and select "Browser Source"
      - Name your source
      - Put address the URL field.
-     - Enter the width and height you want for the widget in the Browser Source Settings box. Do not use Transform Source to change the size. The widgte will size itself for you.
+     - Enter the width and height you want for the widget in the Browser Source Settings box. Do not use Transform Source to change the size. The widget will size itself for you.
      - If you are adding the alert widget, be sure to check "Control Audio via OBS" to balance the noise level.
      - Click ok and place the widget where you want.
 
