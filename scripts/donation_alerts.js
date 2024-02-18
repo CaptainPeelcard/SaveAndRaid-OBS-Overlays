@@ -191,47 +191,49 @@ async function UpdateDonations(donations) {
                 
                     // Don't await final exit animations
                 setTimeout(() => {
-                        // Fade out child text elements
-                    $(`#${donation.guid}`).children().each((index, childData) => {
-                        $(childData).css({
-                            "transition": "all 500ms ease-in-out",
-                            "opacity": 0
+                    if (animations === true) {
+                            // Fade out child text elements
+                        $(`#${donation.guid}`).children().each((index, childData) => {
+                            $(childData).css({
+                                "transition": "all 500ms ease-in-out",
+                                "opacity": 0
+                            });
                         });
-                    });
-                    
-                        // Update all elements with
-                    $(`#${donation.guid}`).prepend(
-                        $("<div class='alert-exit'>")
-                        .css({
-                            "background": "var(--infoPanel-background-color)",
-                            "position": "absolute",
-                            "top": "0%",
-                            "left": "50%",
-                            "transform": "translateX(-50%)",
-                            "height": "100%",
-                            "width": "100%"
-                        })
-                    );
                         
-                    setTimeout(() => {
-                        $(`#${donation.guid} > .alert-exit`).css({
-                            "transition": "all 1000ms ease-in-out",
-                            "width": "var(--infoPanel-alert-height)",
-                            "border-radius": "50%"
-                        });
+                            // Update all elements with
+                        $(`#${donation.guid}`).prepend(
+                            $("<div class='alert-exit'>")
+                            .css({
+                                "background": "var(--infoPanel-background-color)",
+                                "position": "absolute",
+                                "top": "0%",
+                                "left": "50%",
+                                "transform": "translateX(-50%)",
+                                "height": "100%",
+                                "width": "100%"
+                            })
+                        );
+                            
+                        setTimeout(() => {
+                            $(`#${donation.guid} > .alert-exit`).css({
+                                "transition": "all 1000ms ease-in-out",
+                                "width": "var(--infoPanel-alert-height)",
+                                "border-radius": "50%"
+                            });
+        
+                            $(`#${donation.guid}`).css({
+                                "overflow": "hidden",
+                                "transition": "all 1000ms ease-in-out",
+                                "width": "var(--infoPanel-alert-height)",
+                                "background": "rgba(0,0,0,0)",
+                                "background-image": "var(--theme-alert-gif)",
+                                "background-repeat": "no-repeat",
+                                "background-size": "contain",
+                                "background-position": "center"
+                            });
+                        }, 100);
 
-                        $(`#${donation.guid}`).css({
-                            "overflow": "hidden",
-                            "transition": "all 1000ms ease-in-out",
-                            "width": "var(--infoPanel-alert-height)",
-                            "background": "rgba(0,0,0,0)",
-                            "background-image": "var(--theme-alert-gif)",
-                            "background-repeat": "no-repeat",
-                            "background-size": "contain",
-                            "background-position": "center"
-                        });
-                    }, 100);
-                        
+                    }
                         
                     setTimeout(() => {
                         $(`#${donation.guid} > .alert-exit`).css("display", "none");

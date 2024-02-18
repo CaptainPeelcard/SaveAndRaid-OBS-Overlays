@@ -102,19 +102,20 @@
 
             // Get choice to play sounds. Default is enabled. Pull from local stroage if exists. Only set to local storage from toggle switch on dashboard.
         sounds = !sounds || !sounds.trim()
-            ? localStorage.getItem("sounds") === null
+            ? localStorage.getItem("sounds")
             : sounds.toLowerCase() === "true";
             
         sounds = !sounds || !sounds.toString().trim()     
             ? settings.defaults.sounds
-            : sounds;
+            : sounds.toLowerCase() === "true";
             
+            //TODO only override from dashboard, issue getting from local storage here and comparing with URL parameter.
             // Get user choice to enable or disable animations. Default is enabled. Pull from local storage if exists. Only set to local storage from toggle switch on dashboard.
-        /* animations = !animations || !animations.trim()
-            ? localStorage.getItem("animations") === null
-            ? settings.defaults.animations
-            : localStorage.getItem("animations")
-            : animations.toLowerCase() === "true"; */
+        animations = !animations || !animations.trim()
+            ? settings.def
+            : animations.toLowerCase() === "true";
+
+        console.log(animations);
             
             // Get transparency choice for background. Default is enabled.
         transparency = !transparency || !transparency.trim()
