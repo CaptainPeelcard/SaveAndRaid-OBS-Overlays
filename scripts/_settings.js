@@ -28,6 +28,7 @@
     let position = GetQueryParam("position");
     let sounds = GetQueryParam("sounds");
     let transparency = GetQueryParam("transparent");
+    let transparencyLevel = GetQueryParam("transparencyLevel");
     let animations = GetQueryParam("animations");
     let isTest = GetQueryParam("test");
 
@@ -122,6 +123,11 @@
         transparency = !transparency || !transparency.trim()
             ? settings.defaults.transparency
             : transparency.toLowerCase() === "true";
+
+            // Get transparency level choice for background. Default is low.
+        transparencyLevel = !transparencyLevel || !transparencyLevel.trim()
+            ? settings.defaults.transparencyLevel
+            : transparencyLevel;
             
             // Start test or get real data? Default is false.
         isTest = !isTest || !isTest.trim()

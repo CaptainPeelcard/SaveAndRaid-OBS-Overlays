@@ -26,8 +26,29 @@ function GetRandomGradient(fromColor, toColor) {
     // Apply user style choices.
 function SetTheme(overrideTransparency = false) {
     let dataTheme = theme;
-    if (transparency === true || overrideTransparency === true)
+    if (transparency === true || overrideTransparency === true) {
         dataTheme = `${dataTheme} ${theme}-transparent`;
+
+            // We do this to avoid a user selecting an invalid transparency level in applying theme.
+        switch (transparencyLevel) {
+            case "low":
+                dataTheme = `${dataTheme} ${theme}-transparent`
+                break;
+            case "medium":
+                dataTheme = `${dataTheme} ${theme}-transparent-${transparencyLevel}`
+                break;
+            case "high":
+                dataTheme = `${dataTheme} ${theme}-transparent-${transparencyLevel}`
+                break;
+            case "full":
+                dataTheme = `${dataTheme} ${theme}-transparent-${transparencyLevel}`
+                break;
+            default:
+                dataTheme = `${dataTheme} ${theme}-transparent`
+                break;
+        }
+    }
+
     if (animations === false)
         dataTheme = `${dataTheme} no-animate`;
 

@@ -13,6 +13,9 @@
     --black-rgba: rgba(0,0,0,1);
     --black-translucent-hexa: #000000fb;
     --black-translucent-rgba: rgba(0,0,0,0.99);
+    --black-translucent-med-rgba: rgba(0,0,0,0.69);
+    --black-translucent-high-rgba: rgba(0,0,0,0.25);
+    --black-translucent-full-rgba: rgba(0,0,0,0);
 
     --gray-09: #090909;
     --gray-09-hexa: #090909ff;
@@ -75,6 +78,9 @@
     --theme-color-secondary-rgba: var(--black-rgba);
     --theme-color-secondary-translucent-hexa: var(--black-translucent-hexa);
     --theme-color-secondary-translucent-rgba: var(--black-translucent-rgba);
+    --theme-color-secondary-translucent-med-rgba: var(--black-translucent-med-rgba);
+    --theme-color-secondary-translucent-high-rgba: var(--black-translucent-high-rgba);
+    --theme-color-secondary-translucent-full-rgba: var(--black-translucent-full-rgba);
     /* --theme-accent-secondary: ; */
 
     --theme-color-tertiary: #E9E9E9;
@@ -146,6 +152,39 @@
 
 /* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
     --progressBar-background-color: var(--theme-color-secondary-translucent-rgba);
+}
+
+/* 2024 - Follow the Freeman (transparent medium) */
+[data-theme~="2024-transparent-medium"] {
+    /* ---------------------------- PANEL STYLING TRANSPARENT THEME VARIABLES ---------------------------- */
+        --titlePanel-background-color: var(--theme-color-secondary-translucent-med-rgba);
+        --titlePanel-gradient: var(--theme-color-primary-translucent-rgba);
+        --infoPanel-container-border-color: var(--theme-color-primary-translucent-rgba);
+    
+    /* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
+        --progressBar-background-color: var(--theme-color-secondary-translucent-med-rgba);
+}
+
+/* 2024 - Follow the Freeman (transparent high) */
+[data-theme~="2024-transparent-high"] {
+    /* ---------------------------- PANEL STYLING TRANSPARENT THEME VARIABLES ---------------------------- */
+        --titlePanel-background-color: var(--theme-color-secondary-translucent-high-rgba);
+        --titlePanel-gradient: var(--theme-color-primary-translucent-rgba);
+        --infoPanel-container-border-color: var(--theme-color-primary-translucent-rgba);
+    
+    /* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
+        --progressBar-background-color: var(--theme-color-secondary-translucent-high-rgba);
+}
+
+/* 2024 - Follow the Freeman (transparent high) */
+[data-theme~="2024-transparent-full"] {
+    /* ---------------------------- PANEL STYLING TRANSPARENT THEME VARIABLES ---------------------------- */
+        --titlePanel-background-color: var(--theme-color-secondary-translucent-full-rgba);
+        --titlePanel-gradient: var(--theme-color-primary-translucent-rgba);
+        --infoPanel-container-border-color: var(--theme-color-primary-translucent-rgba);
+    
+    /* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
+        --progressBar-background-color: var(--theme-color-secondary-translucent-full-rgba);
 }
 
     /* Disabled animations */
