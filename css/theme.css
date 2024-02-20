@@ -15,7 +15,7 @@
     --black-translucent-rgba: rgba(0,0,0,0.99);
     --black-translucent-med-rgba: rgba(0,0,0,0.69);
     --black-translucent-high-rgba: rgba(0,0,0,0.25);
-    --black-translucent-full-rgba: rgba(0,0,0,.0);
+    --black-translucent-full-rgba: rgba(0,0,0,0.0);
 
     --gray-09: #090909;
     --gray-09-hexa: #090909ff;

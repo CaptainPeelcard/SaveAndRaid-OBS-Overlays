@@ -16,10 +16,10 @@ You can find more information and news at https://saveandraid.org/
     - URL Parameters: position, transparent, transparencyLevel, animations, theme, test
   - **Donation Alerts:**
     - URL: https://alerts.saveandraid.org/donation_alerts.html
-    - URL Parameters: transparent, transparencyLevel, animations, theme, test
+    - URL Parameters: sounds, mode, transparent, transparencyLevel, animations, theme, test
   - **Donation Leaderboard:**
     - URL: https://alerts.saveandraid.org/donation_leaderboard.html
-    - URL Parameters: mode, sounds, transparent, transparencyLevel, animations, theme, test
+    - URL Parameters: transparent, transparencyLevel, animations, theme, test
  
 **Adding Overlays To OBS Scenes**
   1. Copy the desired URL for the wideet you want to add from the links above.
