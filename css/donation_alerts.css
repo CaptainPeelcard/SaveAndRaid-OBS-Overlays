@@ -2,6 +2,11 @@
 @import "common.css";
 @import "animations.css";
 
+.alertCache {
+    background-image: var(--theme-alert-gif);
+    display: none;
+}
+
 #donations {
     min-width: 100px;
 }

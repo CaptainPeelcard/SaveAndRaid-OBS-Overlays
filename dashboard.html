@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale=1.0">
+    <title>Save & Raid - Event Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/dashboard.css?v=1708790159519">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="./images/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./images/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./images/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./images/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./images/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./images/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="./images/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./images/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/icons/favicon-16x16.png">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="msapplication-TileColor" content="#6A00B0">
+    <meta name="msapplication-TileImage" content="./images/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#00DEE5">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script defer src="../scripts/_helper_functions.js?v=1708790159519"></script>
+    <script defer src="../scripts/_settings.js?v=1708790159519"></script>
+    <script defer src="../scripts/campaign_progress_bar.js?v=1708790159519"></script>
+    <script defer src="../scripts/milestones.js?v=1708790159519"></script>
+    <script defer src="../scripts/donation_alerts.js?v=1708790159519"></script>
+    <script defer src="../scripts/donation_leaderboard.js?v=1708790159519"></script>
+    <script defer>
+        $(document).ready(async () => {
+                // Set to resize widget to window size when it loads data the first time.
+            fitToWindow = false;
+                // Load settings and choices.
+            await LoadSettings();
+            position="top";
+            transparency = true;
+            transparencyLevel = "medium";
+            mode = "history";
+                // Set theme choice.
+            SetTheme();
+            SetProgressLayout(position);
+            ResizeInfoPanels();
+            leaderPanelQuantity = 100;
+            SubscribeCampaignProgress();
+            SubscribeDonations(mode, null);
+            SubscribeLeaderboard();
+        });
+
+            // Update widget size if window is resized.
+        $(window).resize(async () => {
+            ResizeInfoPanels();
+        });
+
+        async function ResizeInfoPanels() {
+            let borderHeight = $(window).outerHeight() - $("#dashboard_progress").outerHeight() - $(".dashboard-footer").outerHeight() - $(".titlePanel").outerHeight()
+                - parseFloat($(".dashboard-details").css("margin-top").replace(/px/i, ""))
+                - parseFloat($(".dashboard-details").css("margin-bottom").replace(/px/i, ""))
+                - parseFloat($(".dashboard-details").css("padding-top").replace(/px/i, ""))
+                - parseFloat($(".dashboard-details").css("padding-bottom").replace(/px/i, ""));
+
+            $(".infoPanelContainer").css("height", `${Math.floor(borderHeight)}px`);
+        }
+    </script>
+</head>
+<body class="d-flex overflow-hidden vw-100 vh-100">
+    <div class="bg-img-secondary vh-100 vw-100 position-absolute top-0 start-0"></div>
+    <div class="bg-blur vh-100 vw-100 position-absolute top-0 start-0"></div>
+    <div class="dashboardContainer d-flex flex-column w-100">
+
+        <div id="dashboard_progress" class="row w-100">
+            <div id="progressBar" class="py-1 px-3">
+                <div class="row">
+                    <div class="theme-logo-sm col-3 m-1"></div>
+                    <div class="theme-logo-lg col-2 m-1"></div>
+                    <div class="theme-splash col-2 m-1"></div>
+                    <div class="theme-banner-sm col-4 m-1"></div>
+                    <div class="theme-banner-lg col-3 mx-1"></div>
+                    <div id="campaignInfo" class="col">
+                        <div class="row mt-1 px-3">
+                            <div class="raisedInfo title col px-2 text-center justify-content-center">RAISED:</div>
+                            <div class="milestoneInfo title col px-2 text-center justify-content-center">NEXT MILESTONE:</div>
+                            <div class="goalInfo title col px-2 text-center justify-content-center">GOAL:</div>
+                        </div>
+                        <!-- Progress bar gets inserted above or below info based on position URLparameter. Use SetProgressLayout() in UpdateProgressBar.js -->
+                        <div class="row mb-1 px-3">
+                            <div id="raisedAmount" class="raisedInfo total col px-2 text-center justify-content-center">$0</div>
+                            <div id="milestoneAmount" class="milestoneInfo total col px-2 text-center justify-content-center">$0</div>
+                            <div id="goalAmount" class="goalInfo total col px-2 text-center justify-content-center">$0</div>
+                        </div>
+                        <!-- Progress bar gets inserted above or below info based on position URLparameter. Use SetProgressLayout() in UpdateProgressBar.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-details row w-100 my-1">     
+            <div class="col-8">
+                <div id="donations" class="justify-content-center w-100 h-50">
+                    <div class="mx-2 mb-2 px-1 h-100">
+                        <div id="donationsTitle" class="titlePanel row justify-content-center text-center py-1 fs-1 fw-bolder">
+                            DONATIONS
+                        </div>
+                        <div id="donationsContainer" class="infoPanelContainer row">
+                            <div id="donationPanels" class="d-flex flex-column align-items-center justify-content-top w-100 px-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 h-100">
+                <div id="leaderboard" class="justify-content-center w-100">
+                    <div class="mx-2 mb-2 px-1">
+                        <div id="leaderboardTitle" class="titlePanel row justify-content-center text-center py-1 fs-1 fw-bolder">
+                            TOP DONATORS
+                        </div>
+                        <div id="leaderboardContainer" class="infoPanelContainer row d-flex justify-content-center px-1">
+                            <div id="leaderPanels" class="col"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer id="dashboard-footer" class="dashboard-footer page-footer fixed-bottom w-100 position-bottom pt-2">
+        <div class="row h-100">
+            <div class="dashboard-controls d-flex flex-column justify-content-center col-4 h-100 px-5">
+                <!--<div class="row m-0">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" name="sounds" onclick="StoreSetting(this)" class="form-check-input me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                            <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" name="animations" onclick="StoreSetting(this)" class="form-check-input me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-volume-up-fill" viewBox="0 0 16 16">
+                            <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"/>
+                            <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z"/>
+                            <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06"/>
+                        </svg>
+                    </div>
+                </div>-->
+            </div>
+            <div class="footer-copyright col-8 h-100 pb-4 px-4 m-0">
+                <div class="row h-100">
+                    <div class="col-9"></div>          
+                    <div class="col-3 h-100">
+                        <a href="https://saveandraid.org/" target="_blank">
+                            <div class="theme-trademark-image h-100"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row col-12 text-end">
+                    <small class="text-end p-0 m-0">
+                        © 2024 Trademarks belong to their respective owners. All Rights Reserved. Made with 💖 by CaptainPeelcard and Teklynk
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

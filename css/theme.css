@@ -36,7 +36,7 @@
     --gray-98-rgb: rgb(98,98,98);
     --gray-98-rgba: rgba(98,98,98,1);
     --gray-98-translucent-hexa: #626262f2;
-    --gray-98-translucent-rgba: rgba(98,98,98,0.95);
+    --gray-98-translucent-rgba: rgba(98,98,98,0.69);
 
     --gray-150: #969696;
     --gray-150-hexa: #969696ff;
@@ -49,6 +49,7 @@
     /* 2024 - Follow the Freeman */
 [data-theme~="2024"] {
 /* ---------------------------- CORE THEME VARIABLES ---------------------------- */
+    --theme-trademark-banner: url("../images/2024_Powered_by_SR.png");
     --theme-banner: url("../images/2024_freeman_banner.svg");
     --theme-splash: url("../images/2024_freeman_splash.svg");
     --theme-logo: url("../images/2024_freeman_logo.svg");
@@ -63,6 +64,7 @@
     --theme-color-primary-rgba: rgba(224, 146, 47, 1);
     --theme-color-primary-translucent-hexa: #e0922ff2;
     --theme-color-primary-translucent-rgba: rgba(224, 146, 47, 0.95);
+    --theme-color-primary-super-translucent-rgba: rgba(224, 146, 47, 0.69);
     
     --theme-accent-primary: #ff4500;
     --theme-accent-primary-hexa: #ff4500ff;
@@ -141,6 +143,11 @@
     --progressBar-progress-raised-background-color: var(--theme-color-primary);
     --progressBar-progress-milestone-text-color: var(--theme-color-tertiary);
     --progressBar-progress-milestone-background-color: var(--theme-accent-primary-super-translucent-rgba);
+
+/* ---------------------------- DASHBOARD VARIABLES ---------------------------- */
+    --dashboard-background-image: url("../images/tengyart-sytyoeuhpuk-unsplash-1920.jpg");
+    --dashboard-background-image-secondary: url("../images/SRFLIPMED.gif");
+
 }
 
     /* 2024 - Follow the Freeman (transparent) */

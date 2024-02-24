@@ -1,0 +1,65 @@
+@import "theme.css";
+@import "common.css";
+@import "animations.css";
+@import "campaign_progress_bar.css";
+@import "donation_alerts.css";
+@import "donation_leaderboard.css";
+
+body {
+    background-color: var(--theme-color-secondary-rgba);
+    background: var(--dashboard-background-image);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.dashboardContainer {
+    height: 90%;
+    z-index: 5;
+    padding: 0px;
+    margin: 0px;
+}
+
+.dashboardContainer > div {
+    padding: 0px;
+    margin: 0px;
+}
+
+.bg-blur {
+    background: var(--theme-color-primary-super-translucent-rgba);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.bg-img-secondary {
+    background-color: rgba(0,0,0,0.0);
+    background-image: var(--dashboard-background-image-secondary);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.dashboard-footer {
+    color: var(--titlePanel-text-color);
+    background: var(--titlePanel-background-color);
+    height: 10%;
+}
+
+.theme-trademark-image {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.theme-trademark-image {
+    background-image: var(--theme-trademark-banner);
+}
+
+.infoPanelContainer {
+    overflow-y: scroll !important;
+}
+
+#leaderPanels > .infoPanel {
+    height: 70px !important;
+}

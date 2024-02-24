@@ -162,10 +162,11 @@ async function UpdateDonations(donations) {
             donationPanels = $("#donationPanels").children("div");
 
                 // Show the panel if it will fit. Delay it to line up with the entracne of updated panel animations.
-            if (index >= minShowIndex)
+            if (index >= minShowIndex || fitToWindow === false)
                 setTimeout(() => {
                     $(`#${donation.guid}`).css("display", "flex");
-                    $("#donationPanels").scrollTop($("#donationPanels")[0].scrollHeight);
+                    let scrollPanel = document.getElementById(donation["guid"]);
+                    scrollPanel.scrollIntoView();
                 }, updateDelay);
             }
 
@@ -263,7 +264,7 @@ async function ResizeDonations() {
     let maxPanels = 0;
 
     if (mode === "alerts")
-        return maxPanels;
+        return 1;
     
     if (panels.length > 0) {
         let bodyPadding = parseFloat($("body").css("padding-top").replace("px", ""))
@@ -320,7 +321,9 @@ async function ResizeDonations() {
             });
 
         let borderHeight = ((panelHeight) * maxPanels) + (panelMarginTop * 2) + (panelMarginBottom * 2);
-        $("#donationsContainer").css("height", `${borderHeight}px`);
+        
+        if (fitToWindow === true)
+            $("#donationsContainer").css("height", `${borderHeight}px`);
     }
 
     return maxPanels;
