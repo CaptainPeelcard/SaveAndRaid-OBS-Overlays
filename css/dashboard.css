@@ -32,14 +32,6 @@ body {
     background-repeat: no-repeat;
 }
 
-.bg-img-secondary {
-    background-color: rgba(0,0,0,0.0);
-    background-image: var(--dashboard-background-image-secondary);
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
 .dashboard-footer {
     color: var(--titlePanel-text-color);
     background: var(--titlePanel-background-color);
@@ -62,4 +54,8 @@ body {
 
 #leaderPanels > .infoPanel {
     height: 70px !important;
+}
+
+div.donationTotal, div.donationName {
+    display: block !important;
 }
