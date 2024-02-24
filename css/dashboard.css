@@ -56,6 +56,6 @@ body {
     height: 70px !important;
 }
 
-div.donationTotal, div.donationName {
+#leaderPanels > div > .donationTotal, #leaderPanels > div > .donationName {
     display: block !important;
 }
