@@ -1,3 +1,9 @@
+let milestoneNotificationPlayed = false;
+let milestone = 0;
+let lastMilestone = 0;
+let raised = 0;
+setInterval(async () => {milestone = await milestones.GetNextMilestoneAmount(raised)}, 1000);
+
     // Subscribe to campaign progress
 async function SubscribeCampaignProgress(lastMessage="") {
     let response = await fetch(`${campaignUrl}?key=${apiKey}`);
@@ -15,11 +21,11 @@ async function SubscribeCampaignProgress(lastMessage="") {
             // Get and show the message.
         let message = await response.text();
 
-        if (message !== lastMessage) {
+        if (message !== lastMessage || lastMilestone !== milestone) {
             let campaignData = JSON.parse(message)["data"][0];
             let goal = parseFloat(campaignData["goal"].replace(/,/g,"").replace(/\.0$/,""));
-            let raised = parseFloat(campaignData["amount_raised"].replace(/,/g,"").replace(/\.0$/,""));
-            let milestone = await milestones.GetNextMilestoneAmount(raised);
+            raised = parseFloat(campaignData["amount_raised"].replace(/,/g,"").replace(/\.0$/,""));
+            milestone = await milestones.GetNextMilestoneAmount(raised);
             await UpdateProgressBar(raised, milestone, goal);
         }
 
@@ -34,6 +40,16 @@ async function UpdateProgressBar(raisedAmount, milestoneAmount, goalAmount) {
     let milestonePercent = milestoneAmount === 0
         ? 100
         : Math.floor(raisedAmount / milestoneAmount * 100);
+
+    if (audioEnabled === true && raisedAmount >= lastMilestone && milestoneNotificationPlayed === false) {
+        milestoneSound.play();
+        milestoneNotificationPlayed = true;
+    }
+
+    if (lastMilestone !== milestoneAmount)
+        milestoneNotificationPlayed = false;
+
+    lastMilestone = milestoneAmount;
 
     $(".raisedProgress").attr("style", `width: ${Math.min(raisedPercent, 100)}%`);
     $("#raisedPercent").text(raisedPercent);

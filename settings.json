@@ -1,0 +1,85 @@
+{
+    "defaults":
+    {
+        "theme": "2025",
+        "mode": "alerts",
+        "position": "top",
+        "transparency": true,
+        "transparencyLevel": "low",
+        "animations": true,
+        "sounds": true,
+        "test": false,
+        "soundPlayInterval": 60000
+    },
+    "alertSounds": [
+        {
+            "year": "*",
+            "alerts": [
+                {
+                    "alertType": "donation",
+                    "url": "../sounds/broadside_raising_money.wav"
+                },
+                {
+                    "alertType": "milestone",
+                    "url": "../sounds/broadside_raising_money.wav"
+                }
+            ]
+        },
+        {
+            "year": "2024",
+            "alerts": [
+                {
+                    "alertType": "donation",
+                    "url": "../sounds/hev_donation_received.mp3"
+                },
+                {
+                    "alertType": "milestone",
+                    "url": "../sounds/hev_milestone_achieved.mp3"
+                }
+            ]
+        },
+        {
+            "year": "2025",
+            "alerts": [
+                {
+                    "alertType": "donation",
+                    "url": "../sounds/2025_sanctuary_gold.mp3"
+                },
+                {
+                    "alertType": "milestone",
+                    "url": "../sounds/2025_sanctuary_levelup.mp3"
+                }
+            ]
+        }
+    ],
+    "api":
+    {
+        "apiKey": "iE9yW1yP0oF5bV4pY8oW1yH6zE7gG7qN",
+        "endpoints": [
+            {
+                "name": "campaign_events",
+                "url": "https://api.saveandraid.org/donations_events.php"
+            },
+            {
+                "name": "donations",
+                "url": "https://api.saveandraid.org/donations.php"
+            },
+            {
+                "name": "donation_leaderboard",
+                "url": "https://api.saveandraid.org/donations_leaderboard.php"
+            },
+            {
+                "name": "milestones",
+                "url": "https://api.saveandraid.org/milestones.php"
+            },
+            {
+                "name": "participants",
+                "url": "https://api.saveandraid.org/participants.php"
+            },
+            {
+                "name": "schedule",
+                "url": "https://api.saveandraid.org/schedule.php"
+            }
+        ]
+    }
+}

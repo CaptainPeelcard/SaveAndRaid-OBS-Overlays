@@ -65,113 +65,75 @@ async function UpdateDonations(donations) {
     let updateDelay = animations === true ? 1000 : 0;
     let donationPanels = $("#donationPanels").children("div");
 
-        // Clear all panels if information has been removed. Edge case.
-    if (mode === "history" && donations.length === 0)
+        // Clear all panels if information has been removed or changed.
+    if (mode === "history" && donations.length <= donationPanels.length && donationPanels.length > 0) {
+        for (let panel of donationPanels) {
+            $(panel).addClass("zoomOut").removeClass("zoomIn");
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
         $("#donationPanels").empty();
-
-        // Calculate number of newest panels that can be shown for history.
-    let minShowIndex = fitToWindow === true
-        ? Math.max(0, (donations.length - donationPanelQuantity))
-        : 0
+    }
 
         // Process information for all donations. Update info in history mode and queue new alerts in alert mode.
-        donations.forEach((donation, index) => {
-        let newPanel = null;
-
+    for (let i = 0; i < donations.length; i++) {
+        let donation = donations[i];
             // Define new panel html.
-        if (mode === "alerts" || index + 1 > donationPanels.length)    
-            newPanel = $("<div class='infoPanel row overflow-hidden justify-content-center align-items-center my-1 animated zoomIn'>")
-                .attr("id", donation.guid)
-                .css({
-                    "height": "var(--infoPanel-alert-height)",
-                    "width": "100%",
-                    "background": GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)')
-                })
-                .append($("<div class='donationTotal d-flex justify-content-center align-items-center'>")
-                    .text( "$" + parseFloat(donation.amount.replace(/,/g,"").replace(/\.0$/,"")).toLocaleString("en", {useGrouping:true}) ))
-                .append($("<div class='donationName d-flex justify-content-center align-items-center text-truncate text-uppercase'>")
-                    .text(donation.donor_name))
-                .append($("<figure class='donationText text-end my-1'>")
-                    .append($("<blockquote class='blockquote text-truncate text-uppercase'>")
-                        .append($("<span class='donationTotal'>").text( "$" + parseFloat(donation.amount.replace(/,/g,"").replace(/\.0$/, "")).toLocaleString("en", {useGrouping:true}) ))
-                        .append($("<span class='divider'>").text("   --   "))
-                        .append($("<span class='donationName'>").text(donation.donor_name)))
-                    .append($("<figcaption class='donationMessage blockquote-footer text-truncate text-uppercase'>")
-                        .text(UnEscape(donation.donor_comment))
-                        .css("display", donation.donor_comment === "" ? "none" : "block")));
-
-            // Update data for existing panel.
-        if (newPanel === null) {
-                // Remove donations that have been deleted.
-            if (donation.guid !== $(donationPanels[index]).attr("id") ) do {
-                donationPanels[index].remove();
-                donationPanels = $("#donationPanels").children("div");
-            } while (donation.guid !== $(donationPanels[index]).attr("id") || donationPanels.length === 0)
-
-                // Update information in existing panel.
-            let donationTotals = donationPanels[index].querySelectorAll(".donationTotal");
-            let donationNames = donationPanels[index].querySelectorAll(".donationName");
-            let donationMessage = donationPanels[index].querySelector(".donationMessage");
-            let donationTotalText = "$" + parseFloat(donation.amount.replace(/,/g,"").replace(/\.0$/, "")).toLocaleString("en", {useGrouping:true});
-            let donationMessageText = UnEscape(donation.donor_comment);
-
-            if (donationTotalText !== donationTotals[0].innerHTML || donation.donor_name !== donationNames[0].innerHTML || donationMessageText !== donationMessage.innerHTML) {
-                $(`#${donation.guid}`).addClass("zoomOut").removeClass("zoomIn");
-                
-                    // Reload the panel if it will fit.
-                    // TODO find another way to reload CSS behavior when using add/remove class.
-                if (index >= minShowIndex)
-                    $(`#${donation.guid}`).css("display", "flex");
-
-                setTimeout(() => {
-                    donationMessage.innerHTML = donationMessageText;
-                    $(`#${donation.guid}`).css("display", donationMessageText === "" ? "none" : "block" );
-
-                    donationTotals.forEach(total => {
-                        total.innerHTML = donationTotalText;
-                    });
-                    donationNames.forEach(name => {
-                        name.innerHTML = donation.donor_name;
-                    });
-
-                    $(`#${donation.guid}`)
-                        .css("background", GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)'))
-                        .addClass("zoomIn").removeClass("zoomOut");
-                }, updateDelay);
-            }
-
-                // Check to show or hide the panel so we are showing the newest entries with fitToWinow.
-            setTimeout(() => {
-                if (index >= minShowIndex)
-                    $(`#${donation.guid}`).css("display", "flex");
-                else
-                    $(`#${donation.guid}`).css("display", "none");
-
-                    // Another strange issue OBS browser will not handle the above if/else which works in other browsers. The below workaround to remove the panel works.
-                if (navigator.userAgent.indexOf("OBS") >= 0) {
-                    $(donationPanels[index]).remove();
-                }
-                
-            }, updateDelay + 500);
-        }
+        let newPanel = $("<div class='infoPanel row overflow-hidden justify-content-center align-items-center my-1 animated zoomIn'>")
+            .attr("id", donation.guid)
+            .css({
+                "height": "var(--infoPanel-alert-height)",
+                "width": "100%",
+                "background": GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)')
+            })
+            .append($("<div class='donationTotal d-flex justify-content-center align-items-center'>")
+                .text( "$" + parseFloat(donation.amount.replace(/,/g,"").replace(/\.0$/,"")).toLocaleString("en", {useGrouping:true}) ))
+            .append($("<div class='donationName d-flex justify-content-center align-items-center text-truncate text-uppercase'>")
+                .text(UnEscape(donation.donor_name)))
+            .append($("<figure class='donationText text-end my-1'>")
+                .append($("<blockquote class='blockquote text-truncate text-uppercase'>")
+                    .append($("<span class='donationTotal'>").text( "$" + parseFloat(donation.amount.replace(/,/g,"").replace(/\.0$/, "")).toLocaleString("en", {useGrouping:true}) ))
+                    .append($("<span class='divider'>").text("   --   "))
+                    .append($("<span class='donationName'>").text(UnEscape(donation.donor_name))))
+                .append($("<figcaption class='donationMessage blockquote-footer text-truncate text-uppercase'>")
+                    .text(UnEscape(donation.donor_comment))
+                    .css("display", donation.donor_comment === "" ? "none" : "block")));
 
             // Insert, show and scroll to the new panel.
-        if (mode === "history" && newPanel !== null) {
-                // Add the panel to the bottom of the hostory
+        if (mode === "history") {
             $("#donationPanels").append(newPanel);
-            donationPanels = $("#donationPanels").children("div");
 
-                // Show the panel if it will fit. Delay it to line up with the entracne of updated panel animations.
-            if (index >= minShowIndex || fitToWindow === false)
-                setTimeout(() => {
-                    $(`#${donation.guid}`).css("display", "flex");
-                    let scrollPanel = document.getElementById(donation["guid"]);
-                    scrollPanel.scrollIntoView();
-                }, updateDelay);
+                // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
+            if (fitToWindow === true && alertDimensionsAdjusted === false) {
+                donationPanelQuantity = await ResizeDonations();
+                if (donationPanelQuantity > 0)
+                    alertDimensionsAdjusted = true;
             }
+
+            $(`#${donation.guid}`).css("display", "flex");
+            let scrollPanel = document.getElementById(donation["guid"]);
+            scrollPanel.scrollIntoView(1);
+        }
 
         if (mode === "alerts") {
             alerts.QueueAlert(async () => {
+                donationPanels = $("#donationPanels").children("div");
+                while (donationPanels.length >= donationPanelQuantity && alertDimensionsAdjusted === true) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    donationPanels = $("#donationPanels").children("div");
+                }
+
+                $("#donationPanels").append(newPanel);
+
+                    // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
+                if (fitToWindow === true && alertDimensionsAdjusted === false) {
+                    donationPanelQuantity = await ResizeDonations();
+                    if (donationPanelQuantity > 0)
+                        alertDimensionsAdjusted = true;
+                }
+
+                    // Show the panel if it will fit. Delay it to line up with the entracne of updated panel animations.
+                $(`#${donation.guid}`).css("display", "flex");
+
                 let donationSoundLastPlayed = localStorage.getItem("donationSoundLastPlayed");
                 donationSoundLastPlayed = donationSoundLastPlayed === null
                     ? 0
@@ -183,184 +145,156 @@ async function UpdateDonations(donations) {
                     donationSoundLastPlayed = Date.now();
                     localStorage.setItem("donationSoundLastPlayed", donationSoundLastPlayed);
                 }
-                
-                $("#donationPanels").append(newPanel);
-                donationPanels = $("#donationPanels").children("div");
 
-                    // Show the panel if it will fit. Delay it to line up with the entracne of updated panel animations.
-                $(`#${donation.guid}`).css("display", "flex");
-
-                    // Don't await final exit animations
                 setTimeout(() => {
                     if (animations === true) {
+
                             // Fade out child text elements
                         $(`#${donation.guid}`).children().each((index, childData) => {
                             $(childData).css({
-                                "transition": "all 500ms ease-in-out",
+                                "transition": "opacity 500ms ease-in-out",
                                 "opacity": 0
                             });
                         });
-                    
-                            // Update all elements with
-                        $(`#${donation.guid}`).prepend(
-                            $("<div class='alert-exit'>")
-                            .css({
-                                "background": "var(--infoPanel-background-color)",
-                                "position": "absolute",
-                                "top": "0%",
-                                "left": "50%",
-                                "transform": "translateX(-50%)",
-                                "height": "100%",
-                                "width": "100%"
-                            })
-                        );
-                        
+
+                        $(`#${donation.guid}`).css({
+                            "overflow": "hidden",
+                            "transition": "width 1000ms 0ms ease-in-out, border-radius 500ms 600ms ease-in-out",
+                            "width": "var(--infoPanel-alert-height)",
+                            "border-radius": "50%"
+                        });
+
                         setTimeout(() => {
+                            $(`#${donation.guid}`).empty();
+
+                            $(`#${donation.guid}`).append(
+                                $("<div class='alert-exit'>")
+                                .css({
+                                    "background": "var(--infoPanel-background-color)",
+                                    "height": "100%",
+                                    "width": "100%",
+                                    "border-radius": "50%",
+                                    "opacity": 0
+                                })
+                            );
                             $(`#${donation.guid} > .alert-exit`).css({
-                                "transition": "all 1000ms ease-in-out",
-                                "width": "var(--infoPanel-alert-height)",
-                                "border-radius": "50%"
+                                "opacity": 1,
+                                "transition": "opacity 300ms linear"
                             });
-        
+                        }, 1100);
+
+                        setTimeout(() => {
                             $(`#${donation.guid}`).css({
-                                "overflow": "hidden",
-                                "transition": "all 1000ms ease-in-out",
-                                "width": "var(--infoPanel-alert-height)",
-                                "background": "rgba(0,0,0,0)",
-                                "background-image": "var(--theme-alert-gif)",
+                                "background-color": "rgba(255,255,255,0)",
+                                "background-image": "var(--theme-alert-image)",
                                 "background-repeat": "no-repeat",
                                 "background-size": "contain",
-                                "background-position": "center"
+                                "background-position": "center",
+                                "background-origin": "content-box",
+                                "padding": "10px"
                             });
-                        }, 100);
+                            
+                            $(`#${donation.guid} > .alert-exit`).css({
+                                "opacity": 0,
+                                "transition": "opacity 500ms linear",
+                            });
+                        }, 1300);
                         
-                        setTimeout(() => {
-                            $(`#${donation.guid} > .alert-exit`).css("display", "none");
-                        }, 1000);
-
+                        setTimeout(() =>{
+                            $(`#${donation.guid}`).addClass("zoomOut").removeClass("zoomIn");
+                        }, 1700);
                     }
+
                     setTimeout(() => {
                         $(`#${donation.guid}`).remove();
                     }, 2500);
                 }, 5000);
-
-                await new Promise(resolve => setTimeout(resolve, 8000));
             });
         }
-    });
-
-        // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
-    if (mode === "history" && fitToWindow === true && alertDimensionsAdjusted === false) {
-        donationPanelQuantity = await ResizeDonations();
-        if (donationPanelQuantity > 0)
-            alertDimensionsAdjusted = true;
-    }
+    };
 }
 
     // Set border size to fit maximum number of panels that will can be shown, and the max number of panels.
 async function ResizeDonations() {
     let panels = $("#donationPanels").children("div");
-    let panelModified = false;
     let maxPanels = 0;
-
-    if (mode === "alerts")
-        return 1;
     
     if (panels.length > 0) {
-        let bodyPadding = parseFloat($("body").css("padding-top").replace("px", ""))
-            + parseFloat($("body").css("padding-bottom").replace("px", ""));
-        let containerWhitespace = parseFloat( $("#donations > div").css("margin-top").replace("px", ""))
-            + parseFloat($("#donations > div").css("margin-bottom").replace("px", ""))
-            + parseFloat($("#donations > div").css("padding-top").replace("px", ""))
-            + parseFloat($("#donations > div").css("padding-bottom").replace("px", ""));
-        let titlePanelHeight = parseFloat($("#donationsTitle").css("margin-top").replace("px", ""))
-            + parseFloat($("#donationsTitle").css("margin-bottom").replace("px", ""))
-            + parseFloat($("#donationsTitle").css("height").replace("px", ""));
-        
+        let bodyPadding = parseFloat($("body").css("padding-top").replace(/px/i, ""))
+            + parseFloat($("body").css("padding-bottom").replace(/px/i, ""));
+        let containerWhitespace = parseFloat( $("#donations > div").css("margin-top").replace(/px/i, ""))
+            + parseFloat($("#donations > div").css("margin-bottom").replace(/px/i, ""))
+            + parseFloat($("#donations > div").css("padding-top").replace(/px/i, ""))
+            + parseFloat($("#donations > div").css("padding-bottom").replace(/px/i, ""));
+        let titlePanelHeight = mode === "alerts"
+            ? 0
+            : parseFloat($("#donationsTitle").css("margin-top").replace(/px/i, ""))
+                + parseFloat($("#donationsTitle").css("margin-bottom").replace(/px/i, ""))
+                + parseFloat($("#donationsTitle").css("height").replace(/px/i, ""));
+
         let panel = $(panels[0]);
-        if (panel.css("display") === "none") {
-            panel.css({
-                display: "flex",
-                opacity: 0
-            });
-
-            panelModified = true;
-        }
-
-        let panelHeight = 3 + parseFloat(panel.css("height").replace("px", ""))
-        let panelMarginTop = parseFloat(panel.css("margin-top").replace("px", ""));
-        let panelMarginBottom = parseFloat(panel.css("margin-bottom").replace("px", ""));
+            // TODO find where extra padding/margin is coming from for dynamic calculation. 4px has been added for now.
+        let panelHeight = 4 + parseFloat(panel.css("height").replace(/px/i, ""))
+        let panelMarginTop = parseFloat(panel.css("margin-top").replace(/px/i, ""));
+        let panelMarginBottom = parseFloat(panel.css("margin-bottom").replace(/px/i, ""));
         panelHeight = panelMarginTop > panelMarginBottom
             ? panelHeight + panelMarginTop
             : panelHeight + panelMarginBottom;
-        
-            // TODO find where extra padding/margin is coming from for dynamic calculation. 10px has been added for now.
-        let panelAreaHeight = $(window).innerHeight() - bodyPadding - containerWhitespace - titlePanelHeight;
 
-        if (panelModified === true)
-            panel.css({
-                display: "none",
-                opacity: 1
-            });
+        let panelAreaHeight = $(window).innerHeight() - bodyPadding - containerWhitespace - titlePanelHeight - panelMarginBottom - panelMarginTop;
 
         maxPanels = Math.floor(panelAreaHeight / panelHeight);
 
-        let showPanels = maxPanels === 0
-            ? null
-            : panels.slice((donationPanelQuantity * -1));
-
-        
-        panels.each((index, hiddenPanel) => {
-            if (index <= (panels.length - (showPanels === null ? 0: showPanels.length)))
-                $(hiddenPanel).css("display", "none");
-        });
-        
-        if (showPanels !== null)
-            showPanels.each((index, hiddenPanel) => {
-                $(hiddenPanel).css("display", "flex");
+        //if (mode === "history")
+            panels.each((index, hiddenPanel) => {
+                if ((mode === "history" && index + 1 > maxPanels - panels.length) || (mode === "alerts" && index + 1 <= maxPanels)) {
+                    $(hiddenPanel).css("display", "flex");
+                    hiddenPanel.scrollIntoView(1);
+                }
+                else {
+                    $(hiddenPanel).css("display", "none");
+                }
             });
-
-        let borderHeight = ((panelHeight) * maxPanels) + (panelMarginTop * 2) + (panelMarginBottom * 2);
-        
-        if (fitToWindow === true)
-            $("#donationsContainer").css("height", `${borderHeight}px`);
+    
+        let borderHeight = panelHeight * maxPanels + panelMarginBottom * 2;
+        $("#donationsContainer").css("height", `${borderHeight}px`);
     }
 
     return maxPanels;
 }
 
 async function TestDonations() {
-    const data1 = mode === "alerts"
-        ? JSON.parse(
-            '{ \
-                "data": [ \
-                    { \
-                        "index": 1, \
-                        "currency": "USD", \
-                        "amount": "1.00", \
-                        "donor_name": "Anonymous", \
-                        "donor_comment": "", \
-                        "created": "2024-01-10 10:18:14", \
-                        "guid": "aaaf8b272dd-ff00-446c-aabe-7b5d0be22827" \
-                    } \
-                ] \
-            }')
-        : JSON.parse(
-            '{ \
-                "data": [ \
-                    { \
-                        "index": 1, \
-                        "currency": "USD", \
-                        "amount": "1.00", \
-                        "donor_name": "Anonymous", \
-                        "donor_comment": "eyo", \
-                        "created": "2024-01-10 10:18:14", \
-                        "guid": "f8b272dd-ff00-446c-aabe-7b5d0be22827" \
-                    } \
-                ] \
-            }')
+    const data1 = JSON.parse(
+        '{ \
+            "data": [ \
+                { \
+                    "index": 1, \
+                    "currency": "USD", \
+                    "amount": "1.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "", \
+                    "created": "2024-01-10 10:18:14", \
+                    "guid": "aaaf8b272dd-ff00-446c-aabe-7b5d0be22827" \
+                } \
+            ] \
+        }');
 
     const data2 = JSON.parse(
+        '{ \
+            "data": [ \
+                { \
+                    "index": 1, \
+                    "currency": "USD", \
+                    "amount": "1.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "eyo", \
+                    "created": "2024-01-10 10:18:14", \
+                    "guid": "f8b272dd-ff00-446c-aabe-7b5d0be22827" \
+                } \
+            ] \
+        }')
+
+    const data3 = JSON.parse(
         '{ \
             "data": [ \
                 { \
@@ -439,10 +373,14 @@ async function TestDonations() {
         }');
 
     await new Promise(resolve => setTimeout(resolve, 2000));
-    UpdateDonations(data1["data"]);
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    UpdateDonations(data2["data"]);
-    await new Promise(resolve => setTimeout(resolve, 69000));
+    if (mode === "alerts") {
+        UpdateDonations(data1["data"]);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        UpdateDonations(data2["data"]);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+    UpdateDonations(data3["data"]);
+    await new Promise(resolve => setTimeout(resolve, 25000));
     $("#donationPanels").empty();
     TestDonations();
 }

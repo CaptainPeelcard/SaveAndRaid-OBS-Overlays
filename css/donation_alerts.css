@@ -3,7 +3,7 @@
 @import "animations.css";
 
 .alertCache {
-    background-image: var(--theme-alert-gif);
+    background-image: var(--theme-alert-image);
     display: none;
 }
 
