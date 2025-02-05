@@ -85,5 +85,7 @@ You can find more information and news at https://saveandraid.org/
 
      <img src="https://github.com/CaptainPeelcard/SaveAndRaid-OBS-Overlays/assets/134344260/c2fac7a5-feec-48a8-ba6e-a785a1cbaf2f" width="300">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/CaptainPeelcard/SaveAndRaid-OBS-Overlays/assets/134344260/d0b2d059-19c6-4109-b70d-32808c1e8c4f" width="300">
 
-
-     
+### Twitch Bot Integrations
+You can find imports for local Twitch Bot applications like
+streamer.bot and SAMMI here:
+https://github.com/CaptainPeelcard/SaveAndRaid-Twitch-Bot-Integrations
