@@ -53,7 +53,8 @@ async function UpdateProgressBar(raisedAmount, milestoneAmount, goalAmount) {
 
     $(".raisedProgress").attr("style", `width: ${Math.min(raisedPercent, 100)}%`);
     $("#raisedPercent").text(raisedPercent);
-    $(".milestoneProgress").attr("style", `width: ${Math.min(Math.max((milestoneAmount / goalAmount * 100 - raisedPercent), 0), 100)}%`);
+    //$(".milestoneProgress").attr("style", `width: ${Math.min(Math.max((milestoneAmount / goalAmount * 100 - raisedPercent), 0), 100)}%`);
+    $(".milestoneProgress").attr("style", `width: ${Math.min(Math.max(Math.ceil((milestoneAmount / goalAmount * 100) - raisedPercent), 0), 100)}%`);
     $("#milestonePercent").text(milestonePercent);
 
     milestoneAmount = milestoneAmount === 0
