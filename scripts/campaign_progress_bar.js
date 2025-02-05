@@ -36,10 +36,10 @@ async function SubscribeCampaignProgress(lastMessage="") {
 
     // Load current campaign and milestone progress into the page.
 async function UpdateProgressBar(raisedAmount, milestoneAmount, goalAmount) {
-    let raisedPercent = Math.floor(raisedAmount / goalAmount * 100);
+    let raisedPercent = Math.ceil(raisedAmount / goalAmount * 100);
     let milestonePercent = milestoneAmount === 0
         ? 100
-        : Math.floor(raisedAmount / milestoneAmount * 100);
+        : Math.ceil(raisedAmount / milestoneAmount * 100);
 
     if (audioEnabled === true && raisedAmount >= lastMilestone && milestoneNotificationPlayed === false) {
         milestoneSound.play();
