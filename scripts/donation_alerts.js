@@ -100,7 +100,7 @@ async function UpdateDonations(donations) {
 
             // Insert, show and scroll to the new panel.
         if (mode === "history") {
-            $("#donationPanels").append(newPanel);
+            $("#donationPanels").prepend(newPanel);
 
                 // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
             if (fitToWindow === true && alertDimensionsAdjusted === false) {
@@ -122,7 +122,7 @@ async function UpdateDonations(donations) {
                     donationPanels = $("#donationPanels").children("div");
                 }
 
-                $("#donationPanels").append(newPanel);
+                $("#donationPanels").prepend(newPanel);
 
                     // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
                 if (fitToWindow === true && alertDimensionsAdjusted === false) {
@@ -212,6 +212,9 @@ async function UpdateDonations(donations) {
             });
         }
     };
+    // Last step - scroll to top - only applies to dashboard page and its elements
+    autoScrollToTop('#donationsDashboardContainer', 0, 250);
+    autoScrollToTop('#leaderboardDashboardContainer', 0, 250);
 }
 
     // Set border size to fit maximum number of panels that will can be shown, and the max number of panels.
@@ -384,3 +387,10 @@ async function TestDonations() {
     $("#donationPanels").empty();
     TestDonations();
 }
+
+function autoScrollToTop(containerId, timeOut, speed) {
+    setTimeout(function() {
+        $(containerId).animate({ scrollTop: 0 }, speed);
+    }, timeOut); // 1000ms delay before running the animation
+};
+    
