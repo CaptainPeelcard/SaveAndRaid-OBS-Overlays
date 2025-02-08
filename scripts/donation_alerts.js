@@ -1,5 +1,6 @@
 let donationPanelQuantity = 0;
 let alertDimensionsAdjusted = false;
+let lastDonations;
 
     // Subscribe to donations API and refresh every 1 seconds. Queue alerts if there are new donations.
         // mode: alerts, history
@@ -72,6 +73,9 @@ async function UpdateDonations(donations) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
         $("#donationPanels").empty();
+
+    } else if (mode !== "alerts") {
+        donations.slice((donations.length - donationPanels.length) * -1);
     }
 
         // Process information for all donations. Update info in history mode and queue new alerts in alert mode.
@@ -100,18 +104,25 @@ async function UpdateDonations(donations) {
 
             // Insert, show and scroll to the new panel.
         if (mode === "history") {
-            $("#donationPanels").append(newPanel);
+            $("#donationPanels").prepend(newPanel);
 
                 // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
-            if (fitToWindow === true && alertDimensionsAdjusted === false) {
+            if (fitToWindow === true /*&& alertDimensionsAdjusted === false*/) {
                 donationPanelQuantity = await ResizeDonations();
                 if (donationPanelQuantity > 0)
                     alertDimensionsAdjusted = true;
             }
 
+            lastDonations = donations;
+
             $(`#${donation.guid}`).css("display", "flex");
             let scrollPanel = document.getElementById(donation["guid"]);
-            scrollPanel.scrollIntoView(1);
+            //scrollPanel.scrollIntoView(0);
+
+            //setTimeout(function() {
+            //    $(`#${donation.guid}`).removeClass("zoomIn");
+            //    $(`#${donation.guid}`).css("display", "flex");
+            //}, 1100);
         }
 
         if (mode === "alerts") {
@@ -247,18 +258,19 @@ async function ResizeDonations() {
 
         //if (mode === "history")
             panels.each((index, hiddenPanel) => {
-                if ((mode === "history" && index + 1 > maxPanels - panels.length) || (mode === "alerts" && index + 1 <= maxPanels)) {
-                    $(hiddenPanel).css("display", "flex");
-                    hiddenPanel.scrollIntoView(1);
-                }
-                else {
-                    $(hiddenPanel).css("display", "none");
+                if ((mode === "history" && index + 1 > maxPanels && alertDimensionsAdjusted === true)) {
+                    console.log("got this far");
+                    //$(hiddenPanel).css("display", "flex");
+                    $(hiddenPanel).remove();
+                    //hiddenPanel.scrollIntoView(0);
                 }
             });
     
         let borderHeight = panelHeight * maxPanels + panelMarginBottom * 2;
         $("#donationsContainer").css("height", `${borderHeight}px`);
     }
+
+    alertDimensionsAdjusted = true;
 
     return maxPanels;
 }
