@@ -58,27 +58,27 @@
         "endpoints": [
             {
                 "name": "campaign_events",
-                "url": "https://api.saveandraid.org/donations_events.php"
+                "url": "https://api.saveandraid.local/donations_events.php"
             },
             {
                 "name": "donations",
-                "url": "https://api.saveandraid.org/donations.php"
+                "url": "https://api.saveandraid.local/donations.php"
             },
             {
                 "name": "donation_leaderboard",
-                "url": "https://api.saveandraid.org/donations_leaderboard.php"
+                "url": "https://api.saveandraid.local/donations_leaderboard.php"
             },
             {
                 "name": "milestones",
-                "url": "https://api.saveandraid.org/milestones.php"
+                "url": "https://api.saveandraid.local/milestones.php"
             },
             {
                 "name": "participants",
-                "url": "https://api.saveandraid.org/participants.php"
+                "url": "https://api.saveandraid.local/participants.php"
             },
             {
                 "name": "schedule",
-                "url": "https://api.saveandraid.org/schedule.php"
+                "url": "https://api.saveandraid.local/schedule.php"
             }
         ]
     }

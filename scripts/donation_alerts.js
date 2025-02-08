@@ -110,8 +110,8 @@ async function UpdateDonations(donations) {
             }
 
             $(`#${donation.guid}`).css("display", "flex");
-            let scrollPanel = document.getElementById(donation["guid"]);
-            scrollPanel.scrollIntoView(1);
+            //let scrollPanel = document.getElementById(donation["guid"]);
+            //scrollPanel.scrollIntoView(1);
         }
 
         if (mode === "alerts") {
@@ -213,8 +213,8 @@ async function UpdateDonations(donations) {
         }
     };
     // Last step - scroll to top - only applies to dashboard page and its elements
-    autoScrollToTop('#donationsDashboardContainer', 0, 250);
-    autoScrollToTop('#leaderboardDashboardContainer', 0, 250);
+    //autoScrollToTop('#donationsDashboardContainer', 0, 250);
+    //autoScrollToTop('#leaderboardDashboardContainer', 0, 250);
 }
 
     // Set border size to fit maximum number of panels that will can be shown, and the max number of panels.
@@ -252,7 +252,7 @@ async function ResizeDonations() {
             panels.each((index, hiddenPanel) => {
                 if ((mode === "history" && index + 1 > maxPanels - panels.length) || (mode === "alerts" && index + 1 <= maxPanels)) {
                     $(hiddenPanel).css("display", "flex");
-                    hiddenPanel.scrollIntoView(1);
+                    hiddenPanel.scrollIntoView(0);
                 }
                 else {
                     $(hiddenPanel).css("display", "none");

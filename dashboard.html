@@ -59,8 +59,6 @@
             SubscribeCampaignProgress();
             SubscribeDonations(mode, null);
             SubscribeLeaderboard();
-            autoScrollToTop('#donationsDashboardContainer', 0, 250);
-            autoScrollToTop('#leaderboardDashboardContainer', 0, 250);
         });
 
             // Update widget size if window is resized.
@@ -116,7 +114,7 @@
                         <div id="donationsTitle" class="titlePanel row justify-content-center text-center py-1 fs-1 fw-bolder">
                             DONATIONS
                         </div>
-                        <div id="donationsDashboardContainer" class="infoPanelContainer row">
+                        <div id="donationsContainer" class="infoPanelContainer row">
                             <div id="donationPanels" class="d-flex flex-column align-items-center justify-content-top w-100 px-1 overflow-hidden"></div>
                         </div>
                     </div>
@@ -128,7 +126,7 @@
                         <div id="leaderboardTitle" class="titlePanel row justify-content-center text-center py-1 fs-1 fw-bolder">
                             TOP DONATORS
                         </div>
-                        <div id="leaderboardDashboardContainer" class="infoPanelContainer row d-flex justify-content-center px-1 overflow-hidden">
+                        <div id="leaderboardContainer" class="infoPanelContainer row d-flex justify-content-center px-1 overflow-hidden">
                             <div id="leaderPanels" class="col"></div>
                         </div>
                     </div>
