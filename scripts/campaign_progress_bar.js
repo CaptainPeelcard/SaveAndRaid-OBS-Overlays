@@ -54,7 +54,7 @@ async function UpdateProgressBar(raisedAmount, milestoneAmount, goalAmount) {
                 ? 0
                 : parseInt(donationSoundLastPlayed, 10);
 
-            if (raisedAmount > lastRaised && donationSoundLastPlayed + soundPlayInterval <= Date.now()) {
+            if (isDashboard === true && raisedAmount > lastRaised && donationSoundLastPlayed + soundPlayInterval <= Date.now()) {
                 donationSound.play();
                 donationSoundLastPlayed = Date.now();
                 localStorage.setItem("dashboardDonationSoundLastPlayed", donationSoundLastPlayed);
