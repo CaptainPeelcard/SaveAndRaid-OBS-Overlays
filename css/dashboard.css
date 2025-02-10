@@ -53,9 +53,38 @@ body {
 }
 
 #leaderPanels > .infoPanel {
-    height: 70px !important;
+    height: var(--infoPanel-alert-height) !important;
 }
 
 #leaderPanels > div > .donationTotal, #leaderPanels > div > .donationName {
     display: block !important;
+}
+
+#progressBar {
+    min-width: 275px !important;
+}
+
+#leaderboard, #donations {
+    min-width: 125px !important;
+}
+
+.dashboardContainer {
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+}
+
+@media (max-width: 800px) {
+    .titlePanel {
+        font-size: var(--titlePanel-sm-font-size) !important;
+    }
+
+    .donationTotal {
+        font-size: var(--donationTotal-sm-font-size) !important;
+        -webkit-text-stroke-width: var(--donationTotal-sm-font-stroke-width) !important;
+    }
+    
+    .donationName {
+        font-size: var(--donationName-sm-font-size) !important;
+        -webkit-text-stroke-width: var(--donationName-sm-font-stroke-width) !important;
+    }
 }

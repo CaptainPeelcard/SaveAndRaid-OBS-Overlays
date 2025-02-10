@@ -28,13 +28,12 @@ async function SubscribeLeaderboard(lastMessage = "") {
 
     // Update leaderboard with JSON array containing donor name and toaol.
 async function UpdateLeaderBoard(donators) {
-    let updateDelay = animations === true ? 1000 : 0;
     let leaderPanels = $("#leaderPanels").children("div");
     donators.forEach((donator, index) => {
             // Create a new panel if we don't have enough.
         if (index + 1 > leaderPanels.length) {
             $("#leaderPanels").append($("<div>")
-                .addClass("infoPanel row my-1 animated zoomIn")
+                .addClass("infoPanel row my-1 w-100 align-items-center animated zoomIn")
                 .css("background", GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)'))
                 .append($("<div>")
                     .addClass("donationTotal text-center fs-4")
@@ -46,9 +45,9 @@ async function UpdateLeaderBoard(donators) {
 
             leaderPanels = $("#leaderPanels").children("div");
 
-                // Show the panel if it will fit. Delay it to line up with the entracne of updated panel animations.
+                // Show the panel if it will fit.
             if (index + 1 <= leaderPanelQuantity || fitToWindow === false)
-                setTimeout(() => {$(leaderPanels[index]).css("display", "flex")}, updateDelay);
+                $(leaderPanels[index]).css("display", "flex");
             
         } else {
                 // Update information in existing panel.
@@ -64,18 +63,15 @@ async function UpdateLeaderBoard(donators) {
                 if (index + 1 <= leaderPanelQuantity || fitToWindow === false)
                     $(leaderPanels[index]).css("display", "flex");
 
-                setTimeout(() => {
-                    donationTotal.innerHTML = donationTotalText;
-                    donationName.innerHTML = donator.donor_name;
-                    $(leaderPanels[index])
-                        .css("background", GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)'))
-                        .addClass("zoomIn").removeClass("zoomOut");
-                    
-                        // Reload the panel if it isn't hidden (accounting for area resize during animation.)
-                        // TODO find another way to reload CSS behavior when using add/remove class.
-                    if (index + 1 <= leaderPanelQuantity || fitToWindow ===  false)
-                        $(leaderPanels[index]).css("display", "flex");
-                }, updateDelay);
+                donationTotal.innerHTML = donationTotalText;
+                donationName.innerHTML = donator.donor_name;
+                $(leaderPanels[index])
+                    .css("background", GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)'))
+                    .addClass("zoomIn").removeClass("zoomOut");
+                
+                    // Reload the panel if it isn't hidden (accounting for area resize during animation.)
+                if (index + 1 <= leaderPanelQuantity || fitToWindow ===  false)
+                    $(leaderPanels[index]).css("display", "flex");
             }
         }
     });
@@ -115,7 +111,7 @@ async function ResizeLeaderboard () {
             panelModified = true;
         }
 
-        let panelHeight = parseFloat(panel.css("height").replace(/px/i, ""))
+        let panelHeight = 4 + parseFloat(panel.css("height").replace(/px/i, ""))
         let panelMarginTop = parseFloat(panel.css("margin-top").replace(/px/i, ""));
         let panelMarginBottom = parseFloat(panel.css("margin-bottom").replace(/px/i, ""));
         panelHeight = panelMarginTop > panelMarginBottom
@@ -139,9 +135,9 @@ async function ResizeLeaderboard () {
         });
 
         if (maxPanels > 1)
-            $("#leaderboardTitle").text("TOP DONATORS");
+            $("#leaderboardTitle").text("TOP DONORS");
         else
-            $("#leaderboardTitle").text("TOP DONATOR");
+            $("#leaderboardTitle").text("TOP DONOR");
 
         let borderHeight = panelHeight * maxPanels + panelMarginBottom * 2;
         $("#leaderboardContainer").css("height", `${borderHeight}px`);

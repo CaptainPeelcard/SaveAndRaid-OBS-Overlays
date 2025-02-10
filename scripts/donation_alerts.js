@@ -63,7 +63,6 @@ async function SubscribeDonations(lastMessage = "", lastDonation) {
     // Update alert/history widget with donation data.
 async function UpdateDonations(donations) {
     donations.reverse();
-    let updateDelay = animations === true ? 1000 : 0;
     let donationPanels = $("#donationPanels").children("div");
 
         // Clear all panels if information has been removed or changed.
@@ -107,7 +106,7 @@ async function UpdateDonations(donations) {
             $("#donationPanels").prepend(newPanel);
 
                 // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
-            if (fitToWindow === true /*&& alertDimensionsAdjusted === false*/) {
+            if (fitToWindow === true) {
                 donationPanelQuantity = await ResizeDonations();
                 if (donationPanelQuantity > 0)
                     alertDimensionsAdjusted = true;
@@ -117,12 +116,12 @@ async function UpdateDonations(donations) {
 
             $(`#${donation.guid}`).css("display", "flex");
             let scrollPanel = document.getElementById(donation["guid"]);
-            //scrollPanel.scrollIntoView(0);
+            scrollPanel.scrollIntoView(0);
 
-            //setTimeout(function() {
-            //    $(`#${donation.guid}`).removeClass("zoomIn");
-            //    $(`#${donation.guid}`).css("display", "flex");
-            //}, 1100);
+            setTimeout(function() {
+                $(`#${donation.guid}`).removeClass("zoomIn");
+                $(`#${donation.guid}`).css("display", "flex");
+            }, 1100);
         }
 
         if (mode === "alerts") {
@@ -244,7 +243,7 @@ async function ResizeDonations() {
                 + parseFloat($("#donationsTitle").css("height").replace(/px/i, ""));
 
         let panel = $(panels[0]);
-            // TODO find where extra padding/margin is coming from for dynamic calculation. 4px has been added for now.
+            // Add 4px padding to account for padding from d-flex, flex-column class
         let panelHeight = 4 + parseFloat(panel.css("height").replace(/px/i, ""))
         let panelMarginTop = parseFloat(panel.css("margin-top").replace(/px/i, ""));
         let panelMarginBottom = parseFloat(panel.css("margin-bottom").replace(/px/i, ""));
@@ -256,15 +255,11 @@ async function ResizeDonations() {
 
         maxPanels = Math.floor(panelAreaHeight / panelHeight);
 
-        //if (mode === "history")
-            panels.each((index, hiddenPanel) => {
-                if ((mode === "history" && index + 1 > maxPanels && alertDimensionsAdjusted === true)) {
-                    console.log("got this far");
-                    //$(hiddenPanel).css("display", "flex");
-                    $(hiddenPanel).remove();
-                    //hiddenPanel.scrollIntoView(0);
-                }
-            });
+        panels.each((index, hiddenPanel) => {
+            if (mode === "history" && index + 1 > maxPanels) {
+                $(hiddenPanel).remove();
+            }
+        });
     
         let borderHeight = panelHeight * maxPanels + panelMarginBottom * 2;
         $("#donationsContainer").css("height", `${borderHeight}px`);
