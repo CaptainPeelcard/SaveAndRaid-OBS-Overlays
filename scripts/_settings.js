@@ -101,23 +101,15 @@
                 }
             })();
 
-            // Get choice to play sounds. Default is enabled. Pull from local stroage if exists. Only set to local storage from toggle switch on dashboard.
+            // Get choice to play sounds. Default is enabled.
         sounds = !sounds || !sounds.trim()
-            ? localStorage.getItem("sounds")
+            ? settings.defaults.sounds
             : sounds.toLowerCase() === "true";
             
-        sounds = sounds === null
-            ? settings.defaults.sounds
-            : sounds.toString().toLowerCase() === "true";
-            
-            // Get user choice to enable or disable animations. Default is enabled. Pull from local storage if exists. Only set to local storage from toggle switch on dashboard.
+            // Get user choice to enable or disable animations. Default is enabled.
         animations = !animations || !animations.trim()
-            ? localStorage.getItem("animations")
-            : animations.toLowerCase() === "true";
-
-        animations = animations === null
             ? settings.defaults.animations
-            : animations.toString().toLowerCase() === "true";
+            : animations.toLowerCase() === "true";
             
             // Get transparency choice for background. Default is enabled.
         transparency = !transparency || !transparency.trim()
@@ -131,10 +123,20 @@
             
             // Start test or get real data? Default is false.
         isTest = !isTest || !isTest.trim()
-        ? settings.defaults.test
-        : isTest.toLowerCase() === "true";
+            ? settings.defaults.test
+            : isTest.toLowerCase() === "true";
 
         audioEnabled = navigator.userAgent.indexOf("OBS") >= 0
             ? sounds
             : false;      
+    }
+
+    async function StoreSetting(setting) {
+        eval(`${setting.name} = setting.checked`);
+        
+        if (setting.name === "sounds") {
+            audioEnabled = setting.checked;
+        } else {
+            localStorage.setItem(setting.name, setting.checked);
+        }
     }

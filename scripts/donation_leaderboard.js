@@ -308,15 +308,15 @@ async function TestLeaderBoard() {
         ] \
     }');
 
-        // Empty leaderboard.
-    $("#leaderPanels").empty();
-
-        // Populate test data.
+    
+    // Populate test data.
     await UpdateLeaderBoard(data1["data"]);
     await new Promise(resolve => setTimeout(resolve, 10000));
     await UpdateLeaderBoard(data2["data"]);
     await new Promise(resolve => setTimeout(resolve, 10000));
     await UpdateLeaderBoard(data3["data"]);
     await new Promise(resolve => setTimeout(resolve, 10000));
+        // Empty leaderboard.
+    $("#leaderPanels").empty();
     TestLeaderBoard();
 }

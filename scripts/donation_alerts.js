@@ -379,7 +379,7 @@ async function TestDonations() {
             ] \
         }');
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    //await new Promise(resolve => setTimeout(resolve, 2000));
     if (mode === "alerts") {
         UpdateDonations(data1["data"]);
         await new Promise(resolve => setTimeout(resolve, 5000));

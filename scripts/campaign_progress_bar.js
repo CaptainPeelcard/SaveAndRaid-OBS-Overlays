@@ -1,7 +1,9 @@
-let milestoneNotificationPlayed = false;
+let milestoneNotificationPlayed = true;
 let milestone = 0;
 let lastMilestone = 0;
 let raised = 0;
+let lastRaised = 0;
+let isDashboard = false;
 setInterval(async () => {milestone = await milestones.GetNextMilestoneAmount(raised)}, 1000);
 
     // Subscribe to campaign progress
@@ -40,20 +42,32 @@ async function UpdateProgressBar(raisedAmount, milestoneAmount, goalAmount) {
     let milestonePercent = milestoneAmount === 0
         ? 100
         : Math.ceil(raisedAmount / milestoneAmount * 100);
+        
+        if (audioEnabled === true) {
+            if (raisedAmount >= lastMilestone && milestoneNotificationPlayed === false) {
+                milestoneSound.play();
+                milestoneNotificationPlayed = true;
+            }
 
-    if (audioEnabled === true && raisedAmount >= lastMilestone && milestoneNotificationPlayed === false) {
-        milestoneSound.play();
-        milestoneNotificationPlayed = true;
-    }
+            let donationSoundLastPlayed = localStorage.getItem("dashboardDonationSoundLastPlayed");
+            donationSoundLastPlayed = donationSoundLastPlayed === null
+                ? 0
+                : parseInt(donationSoundLastPlayed, 10);
 
-    if (lastMilestone !== milestoneAmount)
-        milestoneNotificationPlayed = false;
+            if (raisedAmount > lastRaised && donationSoundLastPlayed + soundPlayInterval <= Date.now()) {
+                donationSound.play();
+                donationSoundLastPlayed = Date.now();
+                localStorage.setItem("dashboardDonationSoundLastPlayed", donationSoundLastPlayed);
+            }
+        }
+        if (lastMilestone !== milestoneAmount && milestoneAmount !== 0)
+            milestoneNotificationPlayed = false;
 
     lastMilestone = milestoneAmount;
+    lastRaised = raisedAmount;
 
     $(".raisedProgress").attr("style", `width: ${Math.min(raisedPercent, 100)}%`);
     $("#raisedPercent").text(raisedPercent);
-    //$(".milestoneProgress").attr("style", `width: ${Math.min(Math.max((milestoneAmount / goalAmount * 100 - raisedPercent), 0), 100)}%`);
     $(".milestoneProgress").attr("style", `width: ${Math.min(Math.max(Math.ceil((milestoneAmount / goalAmount * 100) - raisedPercent), 0), 100)}%`);
     $("#milestonePercent").text(milestonePercent);
 
@@ -99,15 +113,22 @@ function SetProgressLayout(position="top") {
 }
 
 async function TestProgressBar() {
+    await new Promise(resolve => setTimeout(resolve, 6900));
     await UpdateProgressBar(69, 5000, 10000);
     await new Promise(resolve => setTimeout(resolve, 6900));
     await UpdateProgressBar(1500, 5000, 10000);
     await new Promise(resolve => setTimeout(resolve, 6900));
     await UpdateProgressBar(6900, 7500, 10000);
     await new Promise(resolve => setTimeout(resolve, 6900));
-    await UpdateProgressBar(12000, 15000, 10000);
+    await UpdateProgressBar(12000, 15000, 20000);
     await new Promise(resolve => setTimeout(resolve, 6900));
     await UpdateProgressBar(15000, 0, 20000);
+    await new Promise(resolve => setTimeout(resolve, 6900));
+    await UpdateProgressBar(17000, 0, 20000);
+    await new Promise(resolve => setTimeout(resolve, 6900));
+    await UpdateProgressBar(19000, 0, 20000);
+    await new Promise(resolve => setTimeout(resolve, 6900));
+    await UpdateProgressBar(20000, 0, 20000);
     await new Promise(resolve => setTimeout(resolve, 6900));
     TestProgressBar();
 }
