@@ -72,9 +72,6 @@ async function UpdateDonations(donations) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
         $("#donationPanels").empty();
-
-    } else if (mode !== "alerts") {
-        donations.slice((donations.length - donationPanels.length) * -1);
     }
 
         // Process information for all donations. Update info in history mode and queue new alerts in alert mode.
