@@ -74,6 +74,9 @@ async function UpdateDonations(donations) {
         $("#donationPanels").empty();
     }
 
+    if (mode === "history")
+        donations = donations.slice(donationPanels.length);
+
         // Process information for all donations. Update info in history mode and queue new alerts in alert mode.
     for (let i = 0; i < donations.length; i++) {
         let donation = donations[i];
