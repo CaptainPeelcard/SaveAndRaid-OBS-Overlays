@@ -5,6 +5,27 @@ function GetQueryParam(param) {
     return urlParams.get(param);
 }
 
+const pad = (n) => (n < 10 ? '0' + n : n);
+
+function formatDate(date, timeOnly = false) {
+    let formatDate = new Date(date);
+    let dateString = [
+        pad(formatDate.getMonth() + 1),
+        pad(formatDate.getDate())
+    ].join('/');
+
+    let timeString = [
+        pad(formatDate.getHours()),
+        pad(formatDate.getMinutes())
+    ].join(':');
+    
+    if (timeOnly === true)
+        return timeString;
+
+    dateString += ` ${timeString}`;
+    return dateString;
+};
+
     // Unescape HTML strings.
 function UnEscape(htmlString) {
     htmlString = htmlString.replace(/&lt;/g , "<");	 
@@ -21,38 +42,6 @@ function GetRandomGradient(fromColor, toColor) {
     let degrees = Math.floor(Math.random() * 361);
     let fromPercentStop = Math.floor(Math.random() * 101);
     return `linear-gradient(${degrees}deg, ${fromColor} ${fromPercentStop}%, ${toColor} 100%)`
-}
-
-    // Apply user style choices.
-function SetTheme(overrideTransparency = false) {
-    let dataTheme = theme;
-    if (transparency === true || overrideTransparency === true) {
-        // dataTheme = `${dataTheme} ${theme}-transparent`;
-
-            // We do this to avoid a user selecting an invalid transparency level in applying theme.
-        switch (transparencyLevel) {
-            case "low":
-                dataTheme = `${dataTheme} transparent`
-                break;
-            case "medium":
-                dataTheme = `${dataTheme} transparent-${transparencyLevel}`
-                break;
-            case "high":
-                dataTheme = `${dataTheme} transparent-${transparencyLevel}`
-                break;
-            case "full":
-                dataTheme = `${dataTheme} transparent-${transparencyLevel}`
-                break;
-            default:
-                dataTheme = `${dataTheme} transparent`
-                break;
-        }
-    }
-
-    if (animations === false)
-        dataTheme = `${dataTheme} no-animate`;
-
-        document.documentElement.setAttribute("data-theme", dataTheme);
 }
 
     // Alert processing queue

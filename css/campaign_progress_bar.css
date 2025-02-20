@@ -20,11 +20,18 @@
 }
 
 #progressBar {
-    font-family: var(--progressBar-font);
     color: var(--progressBar-text-color);
     background-color: var(--progressBar-background-color);
     min-width: 200px;
     min-height: 50px;
+}
+
+.title {
+    font-family: var(--progressBar-font);
+}
+
+.total {
+    font-family: var(--progressBar-progress-font);
 }
 
 #raisedAmount {

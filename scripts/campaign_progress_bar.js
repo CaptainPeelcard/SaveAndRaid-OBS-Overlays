@@ -3,7 +3,6 @@ let milestone = 0;
 let lastMilestone = 0;
 let raised = 0;
 let lastRaised = 0;
-let isDashboard = false;
 setInterval(async () => {milestone = await milestones.GetNextMilestoneAmount(raised)}, 1000);
 
     // Subscribe to campaign progress

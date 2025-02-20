@@ -40,8 +40,6 @@
     <script defer src="./scripts/donation_alerts.js?v=1739190435"></script>
     <script defer>
         $(document).ready(async () => {
-                // Set to resize widget to window size when it loads data the first time.
-            fitToWindow = true;
                 // Load settings and choices.
             await LoadSettings();
                 // Set theme choice.
@@ -63,8 +61,7 @@
 
             // Update widget size if window is resized.
         $(window).resize(async () => {
-            if (fitToWindow === true)
-                donationPanelQuantity = await ResizeDonations();
+            donationPanelQuantity = await ResizeDonations();
         });
     </script>
 </head>

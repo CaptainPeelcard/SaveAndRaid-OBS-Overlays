@@ -10,6 +10,12 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
         crossorigin="anonymous">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./css/dashboard.css?v=1739190435">
 
     <link rel="apple-touch-icon" sizes="57x57" href="./images/icons/apple-icon-57x57.png">
@@ -31,7 +37,7 @@
     <meta name="theme-color" content="#00DEE5">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script defer
+    <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
@@ -41,10 +47,10 @@
     <script defer src="../scripts/milestones.js?v=1739190435"></script>
     <script defer src="../scripts/donation_alerts.js?v=1739190435"></script>
     <script defer src="../scripts/donation_leaderboard.js?v=1739190435"></script>
-    <script defer>
+    <script defer src="../scripts/schedule.js?v=1739190435"></script>
+    <script defer>        
         $(document).ready(async () => {
-                // Set to resize widget to window size when it loads data the first time.
-            fitToWindow = false;
+                // Load widgets in dashboard view.
             isDashboard = true;
                 // Load settings and choices.
             await LoadSettings();
@@ -58,8 +64,7 @@
                 : localStorage.getItem("animations") === "true";
             SetTheme();
             SetProgressLayout(position);
-            ResizeInfoPanels();
-            leaderPanelQuantity = 100;
+            await ResizeDashboard();
             if (isTest === true) {
                 TestProgressBar();
                 TestDonations();
@@ -69,34 +74,166 @@
                 SubscribeCampaignProgress();
                 SubscribeDonations(mode, null);
                 SubscribeLeaderboard();
+                UpdateSchedule();
             }
 
-            $("#footer-text").text(`© ${theme} ${$("#footer-text").text()}`);
+            $("#this-year").text(theme);
             sounds = false;
             $("#animations").attr("checked", animations);
             $("#sounds").attr("checked", sounds);
-        });
+            
+                // Change symbol of collapse button.
+            $(".collapse-button").click(function() {
+                let collapseButton = $(this).find("i");
+                if ($(collapseButton).hasClass("fa-minus") === true)
+                    $(collapseButton).removeClass("fa-minus").addClass("fa-plus");
+                else
+                    $(collapseButton).removeClass("fa-plus").addClass("fa-minus");
+            });
+
+                // Update user configs from toggle inputs.
+            $(".form-check-input").click(function() {
+                StoreSetting(this);
+            });
+
+                // Open settings panel and size settings container to avoid overlapping controls.
+            $("#openSettings").click(function() {
+                $(this).css('display', 'none');
+                $('#settingsBackdrop').css('display', 'block');
+                ResizeDashboard();
+            });
+            
+                // Revert controls when closing settings.
+            $("#closeSettings").click(() => {
+                $("#openSettings").css("display", "block");
+                $("#settingsBackdrop").css("display", "none");
+            });
+
+                // Close settings panel when clicking anywhere else on page.
+            $("#settingsBackdrop").click(() => {
+                $('#closeSettings').click();
+            });
+
+                // Click event for live stream panel.
+            $("#liveNow").click(function () {
+                ShowScheduleDetails(this);
+            });
+
+                // Handle modal size changes
+            $("#donationPopup").resize(async () => {
+                await bootstrap.Modal.getInstance($("#donationPopup")).handleUpdate();
+            });
+
+                // Ensure collapsable panels are correctly sized so scrollable area is fully in view.
+            $(".detail-column div.collapse").on('transitionend webkitTransitionEnd oTransitionEnd', async () => {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                ResizeDashboard();
+            });
+        });        
 
             // Update widget size if window is resized.
         $(window).resize(async () => {
-            ResizeInfoPanels();
+            ResizeDashboard();
         });
 
-        async function ResizeInfoPanels() {
-            let borderHeight = $(window).outerHeight() - $("#dashboard_progress").outerHeight() - $(".dashboard-footer").outerHeight() - $(".titlePanel").outerHeight()
-                - parseFloat($(".dashboard-details").css("margin-top").replace(/px/i, ""))
-                - parseFloat($(".dashboard-details").css("margin-bottom").replace(/px/i, ""))
-                - parseFloat($(".dashboard-details").css("padding-top").replace(/px/i, ""))
-                - parseFloat($(".dashboard-details").css("padding-bottom").replace(/px/i, ""));
+            // Show donation info in modal for easy reading.
+        async function donationPopup(donation) {
+            $("#donationPopup").find(".modal-title").text(`${$(donation).find(".donationTotal").first().text()} from ${$(donation).find(".donationName").first().text()}`);
+            $("#donationPopup").find(".modal-body").text(`${$(donation).find(".donationMessage").text()}`);
+            await $("#donationPopup").modal("show");
+        }
 
-            $(".infoPanelContainer").css("height", `${Math.floor(borderHeight)}px`);
+        async function ShowScheduleDetails(schedule) {
+            $("#donationPopup").find(".modal-title").text(`${$(schedule).find(".schedule-time").text()} - ${$(schedule).find(".streamer-name").text()}`);
+            $("#donationPopup").find(".modal-body").text(`${$(schedule).find(".schedule-description").text()}`);
+            await $("#donationPopup").modal("show");
+        }
+
+            // Resize detail panels and section to ensure scrollable area is fully in view.
+        async function ResizeDashboard() {
+            $(".dashboard-details").css("height", `${$(window).outerHeight() - $("#dashboard_progress").outerHeight() - $(".dashboard-footer").outerHeight()}px`);
+            $(".settings-container").css("height", `${Math.floor($(window).outerHeight() - $(".settings-header").outerHeight() - $(".settings-footer").outerHeight() - 16)}px`);
+
+                // For performance on collapsible containers adjust only if in view. Set to parent container height first for issues with positioning of collapsible containers in flex container.
+            $(".dashboard-details").children().each(async (index, detail) => {    
+                if ($(detail).position().top < ($(".dashboard-details").position().top + $(".dashboard-details").height())) {
+                    $(detail).find(".infoPanelContainer").css("height", `${$(".dashboard-details").height()}px`);
+                    let borderHeight = $(window).outerHeight() - $(".dashboard-footer").outerHeight() - $(detail).position().top
+                        - $(detail).find(".titlePanel").outerHeight()
+                        - parseFloat($(".dashboard-details").css("margin-bottom").replace(/px/i, ""))
+                        - parseFloat($(".dashboard-details").css("padding-bottom").replace(/px/i, ""));
+                    $(detail).find(".infoPanelContainer").css("height", `${Math.floor(borderHeight)}px`);
+                }
+                
+                if ($(detail).find(".collapse-button").css("display") === "none" && $(detail).find(".collapse-button").attr("aria-expanded") === "false") {
+                    $(detail).find("i").removeClass("fa-plus").addClass("fa-minus");
+                    await new bootstrap.Collapse($(detail).find(".collapse"), {toggle: false}).show();
+                }
+            });
         }
     </script>
 </head>
 <body class="d-flex overflow-hidden vw-100 vh-100">
     <div class="bg-blur vh-100 vw-100 position-absolute top-0 start-0"></div>
-    <div class="dashboardContainer d-flex flex-column w-100">
 
+    <!-- DONATION POPUP MODAL -->
+    <div class="modal fade" id="donationPopup" tabindex="-1" aria-labelledby="donationPopup" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title h1 text-uppercase" id="donationPopup"></span>
+                    <button type="button" class="btn btn-link text-reset text-decoration-none fs-3" data-bs-dismiss="modal" title="Close" aria-label="Close">
+                        <i class="fa-solid fa-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body fs-3"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- SETTINGS MENU -->
+    <div class="side-panel vh-100">
+        <div id="settingsBackdrop" class="vh-100 vw-100 position-absolute top-0 start-0" style="display: none; z-index: -1;"></div>
+        <div id="collapseSettings" class="collapse collapse-horizontal">
+            <div class="settings-header row w-100 mb-4">
+                <div class="text-truncate text-center display-4 fw-bolder">SETTINGS</div>
+            </div>
+            <hr class="fw-bolder my-0 py-0">
+            <div class="settings-container p-3 ps-4 fs-3 overflow-scroll">
+                <div class="row w-100 py-1">
+                    <div class="col text-wrap text-truncate py-1">ANIMATIONS</div>
+                    <div class="col-1 form-check form-switch me-0 pe-0">
+                        <input id="animations" title="toggle animations" type="checkbox" name="animations" class="form-check-input">
+                    </div>
+                </div>
+                <div class="row w-100 py-1">
+                    <div class="col text-wrap text-break py-1">SOUNDS</div>
+                    <div class="col-1 form-check form-switch me-0 pe-0">
+                        <input id="sounds" title="toggle sounds" type="checkbox" name="sounds" class="form-check-input">
+                    </div>
+                </div>
+            </div>
+            <footer class="settings-footer fixed-bottom w-100 pt-2">
+                <hr class="fw-bolder py-0 my-0">
+                <div class="row h-100">
+                    <div class="col-1 h-100 ms-3">
+                        <div class="row h-100">
+                            <button
+                                id="closeSettings" class="btn btn-link text-reset text-decoration-none pb-3 pt-0"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings"
+                                title="Close" aria-expanded="true" aria-controls="collapseSettings">
+                                    <i class="fa-solid fa-close display-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="dashboardContainer d-flex flex-column w-100">
         <div id="dashboard_progress" class="row w-100">
             <div id="progressBar" class="py-1 px-3">
                 <div class="row">
@@ -122,58 +259,95 @@
             </div>
         </div>
 
-        <div class="dashboard-details row w-100 my-1">
-            <div class="col-6">
-                <div id="donations" class="justify-content-center w-100 h-100">
-                    <div class="mx-2 mb-2 px-1 h-100">
-                        <div id="donationsTitle" class="titlePanel row justify-content-center text-center py-1 fs-1 fw-bolder">
-                            DONATIONS
-                        </div>
+        <!-- DETAILED INFORMATION PANELS -->
+        <div class="dashboard-details row w-100 m-0 py-2 px-1">
+            <!-- DONATION HISTORY -->
+            <div id="donations" class="detail-column col-4 px-1">
+                <div class="mx-2 mb-2 px-1">
+                    <div id="donationsTitle" class="titlePanel row text-center py-1 fs-1 fw-bolder">
+                        <div class="col p-0 m-0">DONATIONS</div>
+                        <button class="collapse-button col-2 btn btn-link text-reset text-decoration-none d-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDonations" title="Collapse/Expand Donations" aria-expanded="true" aria-controls="collapseDonations">
+                            <i class="fa-solid fa-minus display-4"></i>
+                        </button>
+                    </div>
+                    <div id="collapseDonations" class="collapse show">
                         <div id="donationsContainer" class="infoPanelContainer row">
-                            <div id="donationPanels" class="d-flex flex-column align-items-center justify-content-top w-100 px-1 overflow-hidden"></div>
+                            <div id="donationPanels" class="d-flex flex-column align-items-center w-100 px-1 overflow-hidden"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-6 h-100">
-                <div id="leaderboard" class="justify-content-center w-100 h-100">
-                    <div class="mx-2 mb-2 px-1">
-                        <div id="leaderboardTitle" class="titlePanel row justify-content-center text-center py-1 fs-1 fw-bolder">
-                            TOP DONORS
-                        </div>
+            <!-- DONATION LEADERBOARD -->
+            <div id="leaderboard" class="detail-column col-4 px-1">
+                <div class="mx-2 mb-2 px-1">
+                    <div id="leaderboardTitle" class="titlePanel row text-center py-1 fs-1 fw-bolder">
+                        <div class="col p-0 m-0">TOP DONORS</div>
+                        <button class="collapse-button col-2 btn btn-link text-reset text-decoration-none d-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLeaderboard" title="Collapse/Expand Leaderboard" aria-expanded="true" aria-controls="collapseLeaderboard">
+                            <i class="fa-solid fa-minus display-4"></i>
+                        </button>
+                    </div>
+                    <div id="collapseLeaderboard" class="collapse show">
                         <div id="leaderboardContainer" class="infoPanelContainer row">
-                            <div id="leaderPanels" class="d-flex flex-column align-items-center justify-content-top w-100 px-1 overflow-hidden"></div>
+                            <div id="leaderPanels" class="d-flex flex-column align-items-center w-100 px-1 overflow-hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVENT SCHEDULE -->
+            <div id="schedule" class="detail-column col-4 px-1">
+                <div class="mx-2 mb-2 px-1">
+                    <div id="scheduleTitle" class="titlePanel row text-center py-1 fs-1 fw-bolder">
+                        <div class="col p-0 m-0">SCHEDULE</div>
+                        <button class="collapse-button col-2 btn btn-link text-reset text-decoration-none d-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSchedule" title="Collapse/Expand Schedule" aria-expanded="true" aria-controls="collapseSchedule">
+                            <i class="fa-solid fa-minus display-4"></i>
+                        </button>
+                    </div>
+                    <div id="collapseSchedule" class="collapse show">
+                        <div id="scheduleContainer" class="infoPanelContainer row">
+                            <div class="d-flex flex-column align-items-center w-100 px-1 overflow-hidden">
+                                <div id="liveContainer" class="flex-column align-items-center w-100 px-0 overflow-hidden">
+                                    <div class='live-header row d-flex justify-content-center align-items-center overflow-hidden w-100 my-1 mb-0 fs-5'>SCHEDULED NOW</div>
+                                    <div id="liveNow" class="row d-flex flex-column w-100 mb-1 p-1 overflow-hidden">
+                                        <div class="col w-100 position-relative">
+                                            <div class="row w-100 px-1">
+                                                <div class="schedule-info col h-100 text-truncate d-block py-3">
+                                                    <div class="schedule-time row w-100 fw-bold"></div>
+                                                    <div class="streamer-name row w-100 fw-bolder overflow-none text-uppercase text-truncate d-block h4"></div>
+                                                </div>
+                                                <div class="pfp-container d-flex col-2 h-100 p-1 m-0">
+                                                    <div class="profile-pic ratio ratio-1x1" ></div>
+                                                </div>
+                                            </div>
+                                            <div class="schedule-description row overflow-none text-truncate px-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="schedulePanels" class="d-flex flex-column align-items-center w-100 my-1 px-0 overflow-hidden"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-    <footer id="dashboard-footer" class="dashboard-footer page-footer fixed-bottom position-bottom w-100 pt-2">
+
+    <footer class="dashboard-footer fixed-bottom w-100 pt-2">
         <div class="row h-100">
-            <div class="dashboard-controls col-3 d-flex flex-column justify-content-center h-100 px-5">
-                <div class="row m-0">
-                    <div class="form-check form-switch">
-                        <input id="animations" title="toggle animations" type="checkbox" name="animations" onclick="StoreSetting(this)" class="form-check-input me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
-                            <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="row m-0">
-                    <div class="form-check form-switch">
-                        <input id="sounds" title="toggle sounds" type="checkbox" name="sounds" onclick="StoreSetting(this)" class="form-check-input me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-volume-up-fill" viewBox="0 0 16 16">
-                            <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"/>
-                            <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z"/>
-                            <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06"/>
-                        </svg>
-                    </div>
+            <!-- OPEN SETTINGS -->
+            <div class="col-1 h-100 ms-3">
+                <div class="row h-100">
+                    <button id="openSettings" class="btn btn-link text-reset text-decoration-none pb-3 pt-0"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings"
+                        title="Settings" aria-expanded="false" aria-controls="collapseSettings">
+                            <i class="fa-solid fa-bars display-5"></i>
+                    </button>
                 </div>
             </div>
-            <div class="footer-copyright col-9 h-100 pb-4 px-4 m-0">
+
+            <!-- SITE INFO -->
+            <div class="footer-copyright col h-100 pb-4 px-4 m-0">
                 <div class="row h-100">
                     <div class="col-9"></div>          
                     <div class="col-3 h-100">
@@ -182,9 +356,9 @@
                         </a>
                     </div>
                 </div>
-                <div class="row h-100">
-                    <small id="footer-text" class="text-end py-0 px-2 m-0">
-                        Trademarks belong to their respective owners. All Rights Reserved. Made with 💖 by CaptainPeelcard and Teklynk
+                <div class="row text-end h-100">
+                    <small class="py-0 px-2 m-0">
+                        © <span id="this-year"></span> Trademarks belong to their respective owners. All Rights Reserved. Made with <i class="fa-solid fa-heart"></i> by CaptainPeelcard and Teklynk
                     </small>
                 </div>
             </div>
