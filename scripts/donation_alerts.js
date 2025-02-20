@@ -260,7 +260,7 @@ async function ResizeDonations() {
 
         panels.each((index, hiddenPanel) => {
             if (mode === "history" && index + 1 > maxPanels)
-                setTimeout(() => {$(hiddenPanel).remove()}, animationInterval);
+                $(hiddenPanel).remove();
         });
     
         let borderHeight = panelHeight * maxPanels + panelMarginBottom * 2;
