@@ -1,6 +1,6 @@
 let donationPanelQuantity = 0;
 let alertDimensionsAdjusted = false;
-let lastDonations;
+let lastDonations = [];
 
     // Subscribe to donations API and refresh every 1 seconds. Queue alerts if there are new donations.
         // mode: alerts, history
@@ -63,10 +63,10 @@ async function SubscribeDonations(lastMessage = "", lastDonation) {
     // Update alert/history widget with donation data.
 async function UpdateDonations(donations) {
     donations.reverse();
-    let donationPanels = $("#donationPanels").children("div");
+    let donationPanels = $("#donationPanels").children();
 
         // Clear all panels if information has been removed or changed.
-    if (mode === "history" && donations.length <= donationPanels.length && donationPanels.length > 0) {
+    if (mode === "history" && donations.length <= lastDonations.length && donationPanels.length > 0) {
         for (let panel of donationPanels) {
             $(panel).addClass("zoomOut").removeClass("zoomIn");
         }
@@ -74,8 +74,11 @@ async function UpdateDonations(donations) {
         $("#donationPanels").empty();
     }
 
-    if (mode === "history")
-        donations = donations.slice(donationPanels.length);
+    let lastDonationsLength = lastDonations.length;
+    lastDonations = donations;
+
+    if (mode === "history" && donationPanels.length > 0)
+        donations = donations.slice((donations.length - lastDonationsLength) * -1);
 
         // Process information for all donations. Update info in history mode and queue new alerts in alert mode.
     for (let i = 0; i < donations.length; i++) {
@@ -106,13 +109,8 @@ async function UpdateDonations(donations) {
             $("#donationPanels").prepend(newPanel);
 
                 // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
-            if (fitToWindow === true) {
+            if (fitToWindow === true  && alertDimensionsAdjusted === false)
                 donationPanelQuantity = await ResizeDonations();
-                if (donationPanelQuantity > 0)
-                    alertDimensionsAdjusted = true;
-            }
-
-            lastDonations = donations;
 
             $(`#${donation.guid}`).css("display", "flex");
             let scrollPanel = document.getElementById(donation["guid"]);
@@ -222,6 +220,11 @@ async function UpdateDonations(donations) {
             });
         }
     };
+
+        // Resize widget when loading data
+    if (fitToWindow === true && mode === "history") {
+        donationPanelQuantity = await ResizeDonations();
+    }
 }
 
     // Set border size to fit maximum number of panels that will can be shown, and the max number of panels.
@@ -256,9 +259,8 @@ async function ResizeDonations() {
         maxPanels = Math.floor(panelAreaHeight / panelHeight);
 
         panels.each((index, hiddenPanel) => {
-            if (mode === "history" && index + 1 > maxPanels) {
-                $(hiddenPanel).remove();
-            }
+            if (mode === "history" && index + 1 > maxPanels)
+                setTimeout(() => {$(hiddenPanel).remove()}, animationInterval);
         });
     
         let borderHeight = panelHeight * maxPanels + panelMarginBottom * 2;
