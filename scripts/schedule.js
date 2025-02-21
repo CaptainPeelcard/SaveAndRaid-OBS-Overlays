@@ -127,7 +127,7 @@ async function UpdateSchedule() {
             $("#liveNow").find(".schedule-time").text(`${formatDate(live.utc_start_date_time)} - ${formatDate(live.utc_end_date_time, true)} (${zone})`);
             $("#liveNow").find(".streamer-name").text(live.streamer);
             $("#liveNow").find(".profile-pic").css("background-image", `url('${live.profile_image_url}')`);
-            $("#liveNow").find(".schedule-description").text(live.description);
+            $("#liveNow").find(".schedule-description").text(UnEscape(live.description));
 
             if (live.description !== "")
                 $("#liveNow").find(".schedule-description").css("display", "block");
@@ -174,7 +174,7 @@ async function UpdateSchedule() {
                         .append($("<div class='pfp-container d-flex col-2 h-100 p-1 m-0'>")
                             .append($("<div class='profile-pic ratio ratio-1x1'>")
                                 .css("background-image", `url('${stream.profile_image_url}')`))))
-                    .append($("<div class='schedule-description row overflow-none text-truncate px-1'>").text(stream.description))
+                    .append($("<div class='schedule-description row overflow-none text-truncate px-1'>").text(UnEscape(stream.description)))
                     .append($("<i class='live-indicator fa-solid fa-circle position-absolute top-0 end-0 me-1 mt-1 fw-bolder' title='live'>")));
 
                 if (stream.description !== "")
