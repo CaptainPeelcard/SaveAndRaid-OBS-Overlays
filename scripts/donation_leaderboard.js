@@ -38,7 +38,7 @@ async function UpdateLeaderBoard(donators) {
                 .append($("<div class='donationTotal text-center fs-4'>")
                     .text("$" + parseFloat(donator.amount.replace(/,/g,"").replace(/\.0$/, "")).toLocaleString("en", {useGrouping:true})))
                 .append($("<div class='donationName text-center text-truncate text-uppercase fs-4'>")
-                    .text(donator.donor_name)));
+                    .text(UnEscape(donator.donor_name))));
 
             if (isDashboard === true)
                 $(`#leader-${index}`).click(function() {donationPopup(this)});
