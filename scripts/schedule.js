@@ -25,9 +25,7 @@ const schedule = (() => {
 
             if (message !== lastMessage) {
                 currentSchedule = JSON.parse(message)["data"];
-
-                if (lastMessage !== "" || message !== lastMessage)
-                    isScheduleChanged === true;
+                schedule.isScheduleChanged = true;
             }
 
                 // Subscribe again to get the next message.
