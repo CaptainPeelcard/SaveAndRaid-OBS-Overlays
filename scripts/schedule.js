@@ -58,6 +58,34 @@ const schedule = (() => {
     }
 })();
 
+async function GetLiveStatus(streamerName) {
+    let response = await fetch(`${streamInfoUrl}?channel=${streamerName}`);
+
+    if (response.status === 502) {
+            // Status 502 is a connection timeout error.
+        
+        return false;
+    } else if (response.status !== 200) {
+            // An error, send it to the console.
+        console.log(response.statusText);
+        
+        return false;
+    } else {
+            // Get and show the message.
+        let message = await response.text();
+
+        if (message === "")
+            return false;
+        
+        let streamInfo = JSON.parse(message)["data"];
+        
+        if (streamInfo.length === 0)
+            return false;
+
+        return streamInfo[0].type === "live"
+    }
+}
+
 const testDate = (() => {
     let date = null;
     let offset = 0;
@@ -103,6 +131,8 @@ async function UpdateSchedule() {
 
             if (live.description !== "")
                 $("#liveNow").find(".schedule-description").css("display", "block");
+
+            $("#liveNow").find(".live-indicator").css("display", "none");
             
             $("#liveContainer").css("display", "flex");
         }
@@ -114,6 +144,13 @@ async function UpdateSchedule() {
                 upcomingLength = $("#schedulePanels").children().length;
             }
         }
+    }
+
+    if (live !== undefined && $("#liveNow").find(".alert-indicator").css("display") === "none") {
+        let isLive = await GetLiveStatus(live.streamer);
+
+        if (isLive === true)
+            $("#liveNow").find(".alert-indicator").css("display", "block");
     }
 
     previousLive = live;
@@ -137,7 +174,8 @@ async function UpdateSchedule() {
                         .append($("<div class='pfp-container d-flex col-2 h-100 p-1 m-0'>")
                             .append($("<div class='profile-pic ratio ratio-1x1'>")
                                 .css("background-image", `url('${stream.profile_image_url}')`))))
-                    .append($("<div class='schedule-description row overflow-none text-truncate px-1'>").text(stream.description)));
+                    .append($("<div class='schedule-description row overflow-none text-truncate px-1'>").text(stream.description))
+                    .append($("<i class='live-indicator fa-solid fa-circle position-absolute top-0 end-0 me-1 mt-1 fw-bolder' title='live'>")));
 
                 if (stream.description !== "")
                     $(streamPanel).find(".schedule-description").css("display", "block");
@@ -145,6 +183,15 @@ async function UpdateSchedule() {
                 $(streamPanel).click(function () {ShowScheduleDetails(this)});
                 $("#schedulePanels").append(streamPanel);
         });
+
+        if (live !== undefined && $("#schedulePanels").children().length > 0 && $($("#schedulePanels").children()[0]).find(".live-indicator").css("display") === "none") {
+            let isLive = await GetLiveStatus(upcomingStreams[0].streamer);
+
+            console.log(isLive);
+
+            if (isLive === true)
+                $($("#schedulePanels").children()[0]).find(".live-indicator").css("display", "block");
+        }
 
     await new Promise(resolve => setTimeout(resolve, 10000));
     UpdateSchedule();

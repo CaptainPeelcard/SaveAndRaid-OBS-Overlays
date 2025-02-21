@@ -79,6 +79,10 @@
             {
                 "name": "schedule",
                 "url": "https://api.saveandraid.org/schedule.php"
+            },
+            {
+                "name": "get_stream",
+                "url": "https://api.saveandraid.org/getstream.php"
             }
         ]
     }

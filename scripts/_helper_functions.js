@@ -30,7 +30,7 @@ function formatDate(date, timeOnly = false) {
 function UnEscape(htmlString) {
     htmlString = htmlString.replace(/&lt;/g , "<");	 
     htmlString = htmlString.replace(/&gt;/g , ">");     
-    htmlString = htmlString.replace(/&quot;/g , "\"");  
+    htmlString = htmlString.replace(/&quot;/g , "\"");
     htmlString = htmlString.replace(/&#39;/g , "\'");   
     htmlString = htmlString.replace(/&amp;/g , "&");
     htmlString = htmlString.replace(/&nbsp;/g, " ");

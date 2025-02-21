@@ -22,6 +22,7 @@
     let milestonesUrl;
     let participantUrl;
     let scheduleUrl;
+    let streamInfoUrl;
         // User/Choice settings.
     let settings;
     let soundPlayInterval;
@@ -48,6 +49,7 @@
         milestonesUrl = settings.api.endpoints.find(({ name }) => name === "milestones").url;
         participantUrl = settings.api.endpoints.find(({ name }) => name === "participants").url;
         scheduleUrl = settings.api.endpoints.find(({ name }) => name === "schedule").url;
+        streamInfoUrl = settings.api.endpoints.find(({ name }) => name === "get_stream").url;
         
             // Theme choice.
         theme = !theme || !theme.trim()
