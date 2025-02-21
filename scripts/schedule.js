@@ -26,7 +26,7 @@ const schedule = (() => {
             if (message !== lastMessage) {
                 currentSchedule = JSON.parse(message)["data"];
 
-                if (lastMessage !== "")
+                if (lastMessage !== "" || message !== lastMessage)
                     isScheduleChanged === true;
             }
 
