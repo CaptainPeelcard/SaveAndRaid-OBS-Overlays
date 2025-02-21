@@ -117,8 +117,10 @@ async function UpdateSchedule() {
     let live = await schedule.GetLiveNow(new Date(Date.now() + testDate.offset).toISOString());
     let upcomingStreams = await schedule.GetUpNext();;
     
-    if (live === undefined)
+    if (live === undefined || schedule.isScheduleChanged === true) {
         $("#liveContainer").css("display", "none");
+        $("#liveNow").find(".streamer-name").text("");
+    }
 
     if ((live !== undefined && $("#liveContainer").css("display") === "none") || (previousLive !== undefined && live.utc_start_date_time !== previousLive.utc_start_date_time)) {
         if ($("#liveNow").find(".streamer-name").text() === "" || Date.parse(live.utc_start_date_time) !== Date.parse(previousLive.utc_start_date_time)) {
@@ -144,11 +146,11 @@ async function UpdateSchedule() {
         }
     }
 
-    if (live !== undefined && $("#liveNow").find(".alert-indicator").css("display") === "none") {
+    if (live !== undefined && $("#liveNow").find(".live-indicator").css("display") === "none") {
         let isLive = await GetLiveStatus(live.streamer);
 
         if (isLive === true)
-            $("#liveNow").find(".alert-indicator").css("display", "block");
+            $("#liveNow").find(".live-indicator").css("display", "block");
     }
 
     previousLive = live;
