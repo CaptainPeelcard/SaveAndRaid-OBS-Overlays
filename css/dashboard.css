@@ -4,6 +4,7 @@
 @import "campaign_progress_bar.css";
 @import "donation_alerts.css";
 @import "donation_leaderboard.css";
+@import "schedule.css";
 
 body {
     background-color: var(--theme-color-secondary-rgba);
@@ -13,9 +14,19 @@ body {
     background-repeat: no-repeat;
 }
 
+.side-panel {
+    z-index: 1049;
+    position: absolute;
+    background-color: var(--titlePanel-background-color-transparent);
+    color: var(--titlePanel-text-color);
+}
+
+#collapseSettings > div, hr {
+    width: 50vw;
+}
+
 .dashboardContainer {
     height: 90%;
-    z-index: 5;
     padding: 0px;
     margin: 0px;
 }
@@ -30,29 +41,31 @@ body {
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+    z-index: -1;
+}
+
+footer {
+    height: 10%;
+    min-height: 60px;
 }
 
 .dashboard-footer {
     color: var(--titlePanel-text-color);
     background: var(--titlePanel-background-color);
-    height: 10%;
 }
 
 .theme-trademark-image {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: right center;
-}
-
-.theme-trademark-image {
     background-image: var(--theme-trademark-banner);
 }
 
-.infoPanelContainer {
+.infoPanelContainer, .settingsContainer {
     overflow-y: scroll !important;
 }
 
-#leaderPanels > .infoPanel {
+.infoPanel {
     height: var(--infoPanel-alert-height) !important;
 }
 
@@ -60,26 +73,101 @@ body {
     display: block !important;
 }
 
-#schedule, #leaderboard, #donations, .col-4 {
-    min-width: 125px !important;
+.dashboard-details {
+    overflow: hidden;
 }
 
-.dashboardContainer, .dashboard-details {
-    overflow-x: scroll !important;
+.modal-content {
+    background-color: var(--popup-background-color) !important;
+    color: var(--popup-text-color) !important;
+    font-family: var(--popup-font) !important;
 }
 
-@media (max-width: 800px) {
+.form-switch .form-check-input {
+    height: 30px;
+    width: 60px;
+    background-color: var(--theme-accent-primary-rgba);
+    border-color: var(--theme-color-primary-rgba);
+}
+.form-switch .form-check-input:focus {
+    box-shadow: 0px 0px 15px var(--theme-color-primary-rgba);
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(69,69,69,0.35)'/></svg>");
+}
+.form-switch .form-check-input:checked {
+    border-color: var(--theme-accent-primary-rgba);
+    background-color: var(--theme-color-primary-rgba);
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(69,69,69,0.70)'/></svg>");
+}
+
+.btn-link:hover {
+    color: var(--theme-accent-primary-rgba) !important;
+}
+
+.btn-link:focus {
+    color: var(--theme-accent-primary-rgba) !important;
+    border-color: var(--theme-color-primary-rgba) !important;
+    box-shadow: 0px 0px 10px var(--theme-color-primary-rgba) !important;
+}
+
+@media (max-width: 900px) {
     .titlePanel {
-        font-size: var(--titlePanel-sm-font-size) !important;
+        font-size: 1.5rem !important;
     }
 
     .donationTotal {
         font-size: var(--donationTotal-sm-font-size) !important;
         -webkit-text-stroke-width: var(--donationTotal-sm-font-stroke-width) !important;
+        text-decoration: none !important;
     }
     
     .donationName {
         font-size: var(--donationName-sm-font-size) !important;
         -webkit-text-stroke-width: var(--donationName-sm-font-stroke-width) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    #collapseSettings > div, hr {
+        width: 100vw;
+    }
+    
+    .detail-column {
+        min-width: 190px !important;
+        width: 100% !important;
+    }
+    
+    .titlePanel {
+        font-size: 2rem !important;
+        text-align: start !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .donationTotal {
+        font-size: var(--donationTotal-font-size) !important;
+        -webkit-text-stroke-width: var(--donationTotal-font-stroke-width) !important;
+        text-decoration: none !important;
+    }
+    
+    .donationName {
+        font-size: var(--donationName-font-size) !important;
+        -webkit-text-stroke-width: var(--donationName-font-stroke-width) !important;
+    }
+
+    .collapse-button {
+        display: block !important;
+    }
+}
+
+@media (max-width: 300px) {
+    .titlePanel, .collapse-button i {
+        font-size: var(--titlePanel-sm-font-size) !important;
+    }
+
+    .collapse-button {
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
     }
 }

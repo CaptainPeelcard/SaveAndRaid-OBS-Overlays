@@ -32,23 +32,23 @@ async function UpdateLeaderBoard(donators) {
     donators.forEach((donator, index) => {
             // Create a new panel if we don't have enough.
         if (index + 1 > leaderPanels.length) {
-            $("#leaderPanels").append($("<div>")
-                .addClass("infoPanel row my-1 w-100 align-items-center animated zoomIn")
-                .css("background", GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)'))
-                .append($("<div>")
-                    .addClass("donationTotal text-center fs-4")
-                    .text("$" + parseFloat(donator.amount.replace(/,/g,"").replace(/\.0$/, "")).toLocaleString("en", {useGrouping:true}))
-                ).append($("<div>")
-                    .addClass("donationName text-center text-truncate text-uppercase fs-4")
-                    .text(donator.donor_name))
-            );
+            $("#leaderPanels").append($("<div class='infoPanel row my-1 w-100 align-items-center animated zoomIn'>")
+                .attr("id", `leader-${index}`)
+                .css("background", GetRandomGradient("var(--infoPanel-background-color)", "var(--infoPanel-gradient-color)"))
+                .append($("<div class='donationTotal text-center fs-4'>")
+                    .text("$" + parseFloat(donator.amount.replace(/,/g,"").replace(/\.0$/, "")).toLocaleString("en", {useGrouping:true})))
+                .append($("<div class='donationName text-center text-truncate text-uppercase fs-4'>")
+                    .text(UnEscape(donator.donor_name))));
 
+            if (isDashboard === true)
+                $(`#leader-${index}`).click(function() {donationPopup(this)});
+                    
             leaderPanels = $("#leaderPanels").children("div");
 
                 // Show the panel if it will fit.
-            if (index + 1 <= leaderPanelQuantity || fitToWindow === false)
-                $(leaderPanels[index]).css("display", "flex");
-            
+            if (index + 1 <= leaderPanelQuantity || isDashboard === true)
+                setTimeout(() => {$(leaderPanels[index]).css("display", "flex")}, animationInterval);
+
         } else {
                 // Update information in existing panel.
             let donationTotal = leaderPanels[index].querySelector(".donationTotal");
@@ -57,34 +57,34 @@ async function UpdateLeaderBoard(donators) {
 
             if (donationTotalText !== donationTotal.innerHTML || donator.donor_name !== donationName.innerHTML) {
                 $(leaderPanels[index]).addClass("zoomOut").removeClass("zoomIn");
-                
-                    // Reload the panel if it will fit.
-                    // TODO find another way to reload CSS behavior when using add/remove class.
-                if (index + 1 <= leaderPanelQuantity || fitToWindow === false)
-                    $(leaderPanels[index]).css("display", "flex");
 
-                donationTotal.innerHTML = donationTotalText;
-                donationName.innerHTML = donator.donor_name;
-                $(leaderPanels[index])
-                    .css("background", GetRandomGradient('var(--infoPanel-background-color)', 'var(--infoPanel-gradient-color)'))
-                    .addClass("zoomIn").removeClass("zoomOut");
-                
-                    // Reload the panel if it isn't hidden (accounting for area resize during animation.)
-                if (index + 1 <= leaderPanelQuantity || fitToWindow ===  false)
-                    $(leaderPanels[index]).css("display", "flex");
+                $(leaderPanels[index]).on("animationend webkitAnimationEnd oAnimationEnd", () => {
+                    $(leaderPanels[index]).off("animationend webkitAnimationEnd oAnimationEnd");
+                    donationTotal.innerHTML = donationTotalText;
+                    donationName.innerHTML = donator.donor_name;
+                    $(leaderPanels[index])
+                        .css("background", GetRandomGradient("var(--infoPanel-background-color)", "var(--infoPanel-gradient-color)"))
+                        .addClass("zoomIn").removeClass("zoomOut");
+                });
+
+                if (animations === false) {
+                    $(leaderPanels[index]).trigger("animationend");
+                    $(leaderPanels[index]).trigger("webkitAnimationEnd");
+                    $(leaderPanels[index]).trigger("oAnimationEnd");
+                }
             }
         }
     });
 
-        // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
-    if (fitToWindow === true && leaderboardDimensionsAdjusted === false) {
+        // Resize widget when loading data the first time if not in dashboard.
+    if (isDashboard === false && leaderboardDimensionsAdjusted === false) {
         leaderPanelQuantity = await ResizeLeaderboard()
         if (leaderPanelQuantity > 0)
             leaderboardDimensionsAdjusted = true;
     }
 }
 
-    // Set border size to fit maximum number of panels that will can be shown, and the max number of panels.
+    // Set border size to fit maximum number of panels that can be shown, and the max number of panels.
 async function ResizeLeaderboard () {
     let panels = $("#leaderPanels").children("div");
     let panelModified = false;
@@ -237,7 +237,7 @@ async function TestLeaderBoard() {
                 "index": 1, \
                 "currency": "USD", \
                 "amount": "1000.0", \
-                "donor_name": "DaggerJoe" \
+                "donor_name": "DaggerJoe1" \
             }, \
             { \
                 "index": 2, \

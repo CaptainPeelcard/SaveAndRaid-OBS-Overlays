@@ -8,8 +8,10 @@
     });
 
 // Page/widget settings
-        // Set this to true in page script if this widget should resize itself to the window dimensions when it loads data the first time.
-    let fitToWindow = false;
+        // Controls how widget sizing and data is loaded.
+    let isDashboard = false;
+        // Sync animation interval;
+    let animationInterval;
 
 // Fetch Configurations and Defaults
         // API settings.
@@ -20,6 +22,7 @@
     let milestonesUrl;
     let participantUrl;
     let scheduleUrl;
+    let streamInfoUrl;
         // User/Choice settings.
     let settings;
     let soundPlayInterval;
@@ -46,6 +49,7 @@
         milestonesUrl = settings.api.endpoints.find(({ name }) => name === "milestones").url;
         participantUrl = settings.api.endpoints.find(({ name }) => name === "participants").url;
         scheduleUrl = settings.api.endpoints.find(({ name }) => name === "schedule").url;
+        streamInfoUrl = settings.api.endpoints.find(({ name }) => name === "get_stream").url;
         
             // Theme choice.
         theme = !theme || !theme.trim()
@@ -110,6 +114,10 @@
         animations = !animations || !animations.trim()
             ? settings.defaults.animations
             : animations.toLowerCase() === "true";
+
+        animationInterval = animations === true
+            ? 1000
+            : 0;
             
             // Get transparency choice for background. Default is enabled.
         transparency = !transparency || !transparency.trim()
@@ -128,7 +136,38 @@
 
         audioEnabled = navigator.userAgent.indexOf("OBS") >= 0
             ? sounds
-            : false;      
+            : false;
+    }
+
+        // Apply user style choices.
+    function SetTheme() {
+        let dataTheme = theme;
+        if (transparency === true) {
+    
+                // We do this to avoid a user selecting an invalid transparency level in applying theme.
+            switch (transparencyLevel) {
+                case "low":
+                    dataTheme = `${dataTheme} transparent`
+                    break;
+                case "medium":
+                    dataTheme = `${dataTheme} transparent-${transparencyLevel}`
+                    break;
+                case "high":
+                    dataTheme = `${dataTheme} transparent-${transparencyLevel}`
+                    break;
+                case "full":
+                    dataTheme = `${dataTheme} transparent-${transparencyLevel}`
+                    break;
+                default:
+                    dataTheme = `${dataTheme} transparent`
+                    break;
+            }
+        }
+    
+        if (animations === false)
+            dataTheme = `${dataTheme} no-animate`;
+    
+            document.documentElement.setAttribute("data-theme", dataTheme);
     }
 
     async function StoreSetting(setting) {
@@ -138,5 +177,6 @@
             audioEnabled = setting.checked;
         } else {
             localStorage.setItem(setting.name, setting.checked);
+            SetTheme();
         }
     }

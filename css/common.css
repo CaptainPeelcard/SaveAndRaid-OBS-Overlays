@@ -2,7 +2,7 @@
 -webkit-scrollbar {
     display: none !important;
 }
-*, .infoPanelContainer {
+* {
         /* IE and Edge scrollbar*/
    -ms-overflow-style: none !important;
         /* Firefox scrollbar */

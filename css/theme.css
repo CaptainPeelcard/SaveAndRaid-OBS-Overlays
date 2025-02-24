@@ -141,6 +141,11 @@
 
 /* ---------------------------- DASHBOARD VARIABLES ---------------------------- */
     --dashboard-background-image: url("../images/tengyart-sytyoeuhpuk-unsplash-1920.jpg");
+
+/* ---------------------------- POPUP VARIABLES ---------------------------- */
+    --popup-background-color: var(--theme-color-secondary-rgba);
+    --popup-text-color: var(--theme-color-tertiary-rgba);
+    --popup-font: var(--theme-font-secondary);
 }
 
     /* 2025 - Sanctuary */
@@ -153,7 +158,7 @@
     --theme-alert-image: url("../images/2025_sanctuary_logo.svg");
 
     --theme-font-primary: "Diablo";
-    --theme-font-secondary: "Diablo";
+    --theme-font-secondary: "Arial Narrow 7";
 
     --theme-color-primary: #ef4b25;
     --theme-color-primary-rgb: rgb(239,75,37);
@@ -182,7 +187,7 @@
 
 /* ---------------------------- PANEL STYLING THEME VARIABLES ---------------------------- */
     --titlePanel-sm-font-size: 1rem;
-    --titlePanel-font: var(--theme-font-secondary);
+    --titlePanel-font: var(--theme-font-primary);
     --titlePanel-text-color: var(--theme-color-primary);
     --titlePanel-background-color: var(--theme-color-secondary-rgba);
     --titlePanel-background-color-transparent: var(--theme-color-secondary-translucent-rgba);
@@ -200,25 +205,29 @@
     --infoPanel-container-border-width: 2px;
         /* infoPanel height in alert mode */
     --infoPanel-alert-height: 70px;
+        /* header panels */
+    --headerPanel-background-color: var(--theme-color-secondary-translucent-rgba);
+    --headerPanel-text-color: var(--theme-accent-primary);
+    --headerPanel-height: 50px;
 
 /* ---------------------------- DONATION INFO (ALERTS/LEADERBOARD) THEME VARIABLES ---------------------------- */
-    --donationTotal-font: var(--theme-font-secondary);
+    --donationTotal-font: var(--theme-font-primary);
     --donationTotal-font-stroke-color: var(--theme-accent-primary-rgba);
-    --donationTotal-font-stroke-width: 0.5px;
+    --donationTotal-font-stroke-width: 0px;
     --donationTotal-sm-font-size: 1rem;
-    --donationTotal-sm-font-stroke-width: 0.5px;
+    --donationTotal-sm-font-stroke-width: 0px;
 
     --donationName-font: var(--theme-font-primary);
     --donationName-font-stroke-color: var(--theme-accent-primary-rgba);
-    --donationName-font-stroke-width: 0.5px;
+    --donationName-font-stroke-width: 0px;
     --donationName-sm-font-size: 1rem;
-    --donationName-sm-font-stroke-width: 0.4px;
+    --donationName-sm-font-stroke-width: 0px;
 
     --donationMessage-font: var(--theme-font-secondary);
     --donationMessage-font-stroke-color: var(--theme-accent-primary-rgba);
-    --donationMessage-font-stroke-width: 0.3px;
+    --donationMessage-font-stroke-width: 0px;
     --donationMessage-sm-font-size: 0.5rem;
-    --donationMessage-sm-font-stroke-width: 0.2px;
+    --donationMessage-sm-font-stroke-width: 0px;
 
 /* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
     --progressBar-font: var(--theme-font-primary);
@@ -241,19 +250,41 @@
     --progressBar-progress-milestone-text-color: var(--theme-color-secondary);
     --progressBar-progress-milestone-background-color: var(--theme-accent-primary-super-translucent-rgba);
 
+/* ---------------------------- SCHEDULE VARIABLES ---------------------------- */    
+    
+    --liveHeader-height: 30px;
+    --liveHeader-background-color: var(--theme-color-secondary-rgba);
+    --liveHeader-text-color: var(--theme-accent-primary-rgba);
+
+    --livePanel-background-color: var(--theme-accent-primary-rgb);
+    --livePanel-font: var(--theme-font-primary);
+    --livePanel-text-color: var(--theme-color-secondary-rgba);
+
+    --schedulePanel-background-color: var(--theme-color-primary-rgba);
+    --schedulePanel-font: var(--theme-font-primary);
+    --schedulePanel-text-color: var(--theme-color-secondary-rgba);
+
+    --schedule-font: var(--theme-font-primary);
+    --schedule-description-font: var(--theme-font-secondary);
+
 /* ---------------------------- DASHBOARD VARIABLES ---------------------------- */
     --dashboard-background-image: url("../images/tristram2.png");
+
+/* ---------------------------- POPUP VARIABLES ---------------------------- */
+    --popup-background-color: var(--theme-color-secondary-rgba);
+    --popup-text-color: var(--theme-color-tertiary-rgba);
+    --popup-font: var(--theme-font-secondary);
 }
 
     /* Transparent */
 [data-theme~="transparent"] {
-/* ---------------------------- PANEL STYLING TRANSPARENT THEME VARIABLES ---------------------------- */
-    --titlePanel-background-color: var(--titlePanel-background-color-transparent);
-    --titlePanel-gradient-color: var(--titlePanel-gradient-color-transparent);
-    --infoPanel-container-border-color: var(--infoPanel-container-border-color-transparent);
+    /* ---------------------------- PANEL STYLING TRANSPARENT THEME VARIABLES ---------------------------- */
+        --titlePanel-background-color: var(--titlePanel-background-color-transparent);
+        --titlePanel-gradient-color: var(--titlePanel-gradient-color-transparent);
+        --infoPanel-container-border-color: var(--infoPanel-container-border-color-transparent);
 
-/* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
-    --progressBar-background-color: var(--progressBar-background-color-transparent);
+    /* ---------------------------- CAMPAIGN PROGRESS BAR VARIABLES ---------------------------- */
+        --progressBar-background-color: var(--progressBar-background-color-transparent);
 }
 
 /* Transparent Medium) */

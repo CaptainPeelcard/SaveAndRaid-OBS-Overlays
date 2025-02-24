@@ -64,7 +64,7 @@ async function SubscribeDonations(lastMessage = "", lastDonation) {
 async function UpdateDonations(donations) {
     donations.reverse();
     let donationPanels = $("#donationPanels").children();
-
+    
         // Clear all panels if information has been removed or changed.
     if (mode === "history" && donations.length <= lastDonations.length && donationPanels.length > 0) {
         for (let panel of donationPanels) {
@@ -72,9 +72,6 @@ async function UpdateDonations(donations) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
         $("#donationPanels").empty();
-
-    } else if (mode !== "alerts") {
-        donations.slice((donations.length - donationPanels.length) * -1);
     }
 
     let lastDonationsLength = lastDonations.length;
@@ -111,38 +108,35 @@ async function UpdateDonations(donations) {
         if (mode === "history") {
             $("#donationPanels").prepend(newPanel);
 
-                // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
-            if (fitToWindow === true  && alertDimensionsAdjusted === false)
+                // Resize widget when loading data if not dashboard.
+            if (isDashboard === false && alertDimensionsAdjusted === false)
                 donationPanelQuantity = await ResizeDonations();
+                
+                // Add click event handler for showing details in modal on dashboard.
+            if (isDashboard === true) {
+                $(`#${donation.guid}`).click(function() {donationPopup(this)});
+            }
 
-            $(`#${donation.guid}`).css("display", "flex");
+            setTimeout(() => $(`#${donation.guid}`).css("display", "flex"), animationInterval);
             let scrollPanel = document.getElementById(donation["guid"]);
             scrollPanel.scrollIntoView(0);
-
-            setTimeout(function() {
-                $(`#${donation.guid}`).removeClass("zoomIn");
-                $(`#${donation.guid}`).css("display", "flex");
-            }, 1100);
         }
 
         if (mode === "alerts") {
             alerts.QueueAlert(async () => {
                 donationPanels = $("#donationPanels").children("div");
+                    // Wait to queue panel into alerts until it can fit. Don't wait if first time adjustments haven't run yet.
                 while (donationPanels.length >= donationPanelQuantity && alertDimensionsAdjusted === true) {
                     await new Promise(resolve => setTimeout(resolve, 100));
                     donationPanels = $("#donationPanels").children("div");
                 }
 
                 $("#donationPanels").append(newPanel);
-
-                    // Resize widget when loading data the first time, fitToWindow must be set to true in page script.
-                if (fitToWindow === true && alertDimensionsAdjusted === false) {
+                    // Resize widget when loading data if not in dashboard view.
+                if (isDashboard === false && alertDimensionsAdjusted === false) {
                     donationPanelQuantity = await ResizeDonations();
-                    if (donationPanelQuantity > 0)
-                        alertDimensionsAdjusted = true;
                 }
 
-                    // Show the panel if it will fit. Delay it to line up with the entracne of updated panel animations.
                 $(`#${donation.guid}`).css("display", "flex");
 
                 let donationSoundLastPlayed = localStorage.getItem("donationSoundLastPlayed");
@@ -224,13 +218,13 @@ async function UpdateDonations(donations) {
         }
     };
 
-        // Resize widget when loading data
-    if (fitToWindow === true && mode === "history") {
+        // Resize widget when loading data if not dashboard.
+    if (isDashboard === false && mode === "history") {
         donationPanelQuantity = await ResizeDonations();
     }
 }
 
-    // Set border size to fit maximum number of panels that will can be shown, and the max number of panels.
+    // Set border size to fit maximum number of panels that can be shown, and the max number of panels.
 async function ResizeDonations() {
     let panels = $("#donationPanels").children("div");
     let maxPanels = 0;
@@ -263,7 +257,7 @@ async function ResizeDonations() {
 
         panels.each((index, hiddenPanel) => {
             if (mode === "history" && index + 1 > maxPanels)
-                $(hiddenPanel).remove();
+                setTimeout(() => {$(hiddenPanel).remove()}, animationInterval);
         });
     
         let borderHeight = panelHeight * maxPanels + panelMarginBottom * 2;
@@ -307,6 +301,66 @@ async function TestDonations() {
         }')
 
     const data3 = JSON.parse(
+        '{ \
+            "data": [ \
+                { \
+                    "index": 1, \
+                    "currency": "USD", \
+                    "amount": "10.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "", \
+                    "created": "2024-02-03 18:20:50", \
+                    "guid": "46757b3d-50ee-4c1e-acbe-55d6465cd982" \
+                }, \
+                { \
+                    "index": 2, \
+                    "currency": "USD", \
+                    "amount": "25.00", \
+                    "donor_name": "Quarter_Joe", \
+                    "donor_comment": "💖💖💖", \
+                    "created": "2024-02-03 17:09:29", \
+                    "guid": "87640226-5f9c-4d20-828e-e0f773ad899d" \
+                }, \
+                { \
+                    "index": 3, \
+                    "currency": "USD", \
+                    "amount": "100.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "", \
+                    "created": "2024-02-03 17:09:14", \
+                    "guid": "06778107-3216-456d-a63e-79828d828a29" \
+                }, \
+                { \
+                    "index": 4, \
+                    "currency": "USD", \
+                    "amount": "10.00", \
+                    "donor_name": "DapperJoe", \
+                    "donor_comment": "", \
+                    "created": "2024-02-03 17:03:43", \
+                    "guid": "fc7256c4-244b-4ce0-98a7-cd9b525ac884" \
+                }, \
+                { \
+                    "index": 5, \
+                    "currency": "USD", \
+                    "amount": "6.00", \
+                    "donor_name": "Sixy_Joe", \
+                    "donor_comment": "This event is amazing!", \
+                    "created": "2024-01-17 21:29:48", \
+                    "guid": "60e5b714-25e5-4e2e-9631-c6ece1d40a6e" \
+                }, \
+                { \
+                    "index": 6, \
+                    "currency": "USD", \
+                    "amount": "1.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "yo", \
+                    "created": "2024-01-10 10:18:14", \
+                    "guid": "f8b272dd-ff00-446c-aabe-7b5d0be228209" \
+                } \
+            ] \
+        }');
+
+    const data4 = JSON.parse(
         '{ \
             "data": [ \
                 { \
@@ -379,7 +433,94 @@ async function TestDonations() {
                     "donor_name": "Anonymous", \
                     "donor_comment": "yo", \
                     "created": "2024-01-10 10:18:14", \
-                    "guid": "f8b272dd-ff00-446c-aabe-7b5d0be22827" \
+                    "guid": "f8b272dd-ff00-446c-aabe-7b5d0be228209" \
+                } \
+            ] \
+        }');
+
+    const data5 = JSON.parse(
+        '{ \
+            "data": [ \
+                { \
+                    "index": 1, \
+                    "currency": "USD", \
+                    "amount": "50.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "Test", \
+                    "created": "2024-02-09 00:27:05", \
+                    "guid": "df6a03eb-8e44-44ff-9db7-7880e8400db3" \
+                }, \
+                { \
+                    "index": 2, \
+                    "currency": "USD", \
+                    "amount": "100.00", \
+                    "donor_name": "DaggerJoe", \
+                    "donor_comment": "Follow the freeman!", \
+                    "created": "2024-02-09 00:26:05", \
+                    "guid": "df6a03eb-8e44-44ff-9db7-7880e8400db3" \
+                }, \
+                { \
+                    "index": 3, \
+                    "currency": "USD", \
+                    "amount": "69.00", \
+                    "donor_name": "Joe_mama", \
+                    "donor_comment": "nice", \
+                    "created": "2024-02-06 22:48:29", \
+                    "guid": "92630ebd-1bb2-4e4c-9a02-8d70d44348ec" \
+                }, \
+                { \
+                    "index": 4, \
+                    "currency": "USD", \
+                    "amount": "10.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "", \
+                    "created": "2024-02-03 18:20:50", \
+                    "guid": "46757b3d-50ee-4c1e-acbe-55d6465cd982" \
+                }, \
+                { \
+                    "index": 5, \
+                    "currency": "USD", \
+                    "amount": "25.00", \
+                    "donor_name": "Quarter_Joe", \
+                    "donor_comment": "💖💖💖", \
+                    "created": "2024-02-03 17:09:29", \
+                    "guid": "87640226-5f9c-4d20-828e-e0f773ad899d" \
+                }, \
+                { \
+                    "index": 6, \
+                    "currency": "USD", \
+                    "amount": "100.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "", \
+                    "created": "2024-02-03 17:09:14", \
+                    "guid": "06778107-3216-456d-a63e-79828d828a29" \
+                }, \
+                { \
+                    "index": 7, \
+                    "currency": "USD", \
+                    "amount": "10.00", \
+                    "donor_name": "DapperJoe", \
+                    "donor_comment": "", \
+                    "created": "2024-02-03 17:03:43", \
+                    "guid": "fc7256c4-244b-4ce0-98a7-cd9b525ac884" \
+                }, \
+                { \
+                    "index": 8, \
+                    "currency": "USD", \
+                    "amount": "6.00", \
+                    "donor_name": "Sixy_Joe", \
+                    "donor_comment": "This event is amazing!", \
+                    "created": "2024-01-17 21:29:48", \
+                    "guid": "60e5b714-25e5-4e2e-9631-c6ece1d40a6e" \
+                }, \
+                { \
+                    "index": 9, \
+                    "currency": "USD", \
+                    "amount": "1.00", \
+                    "donor_name": "Anonymous", \
+                    "donor_comment": "yo", \
+                    "created": "2024-01-10 10:18:14", \
+                    "guid": "f8b272dd-ff00-446c-aabe-7b5d0be228209" \
                 } \
             ] \
         }');
@@ -391,7 +532,13 @@ async function TestDonations() {
         UpdateDonations(data2["data"]);
         await new Promise(resolve => setTimeout(resolve, 5000));
     }
-    UpdateDonations(data3["data"]);
+    if (mode === "history") {
+        UpdateDonations(data3["data"]);
+        await new Promise(resolve => setTimeout(resolve, 6000));
+        UpdateDonations(data4["data"]);
+        await new Promise(resolve => setTimeout(resolve, 6000));
+    }
+    UpdateDonations(data5["data"]);
     await new Promise(resolve => setTimeout(resolve, 25000));
     $("#donationPanels").empty();
     TestDonations();

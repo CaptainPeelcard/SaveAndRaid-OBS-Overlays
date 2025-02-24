@@ -1,0 +1,85 @@
+@import "theme.css";
+@import "common.css";
+@import "animations.css";
+
+#schedule {
+    min-width: 100px;
+}
+
+#schedulePanels, #scheduleContainer {
+    overflow: hidden;
+}
+
+.live-header {
+    color: var(--liveHeader-text-color);
+    background-color: var(--liveHeader-background-color);
+    font-family: var(--schedule-font);
+    height: var(--liveHeader-height);
+}
+
+#liveNow {
+    color: var(--livePanel-text-color);
+    background-color: var(--livePanel-background-color);
+    font-family: var(--schedule-font);
+}
+
+.schedule-panel {
+    color: var(--schedulePanel-text-color);
+    background-color: var(--schedulePanel-background-color);
+    font-family: var(--schedule-font);
+}
+
+.schedule-time {
+    font-family: var(--schedule-description-font);
+}
+
+.schedule-description {
+    font-family: var(--schedule-description-font);
+    display: none;
+}
+
+.profile-pic {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-origin: padding-box;
+    border-radius: 50%;
+}
+
+.live-indicator {
+    color: red;
+    border: 1px solid black;
+    border-radius: 50%;
+    display: none;
+}
+
+#liveContainer {
+    display: none;
+}
+
+@media (max-width: 1095px) {
+    .pfp-container {
+        display: none !important;
+    }
+    .schedule-info {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .pfp-container {
+        display: flex !important;
+    }
+    .schedule-info {
+        width: unset !important;
+    }
+}
+
+@media (max-width: 345px) {
+    .pfp-container {
+        display: none !important;
+    }
+    .schedule-info {
+        width: 100% !important;
+    }
+}
