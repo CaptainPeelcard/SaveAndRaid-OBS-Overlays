@@ -72,6 +72,9 @@ async function UpdateDonations(donations) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
         $("#donationPanels").empty();
+
+    } else if (mode !== "alerts") {
+        donations.slice((donations.length - donationPanels.length) * -1);
     }
 
     let lastDonationsLength = lastDonations.length;

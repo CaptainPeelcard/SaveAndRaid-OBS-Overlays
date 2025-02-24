@@ -38,7 +38,7 @@
     async function LoadSettings() {
         let response = await fetch("../settings.json");
         let json = await response.text();
-        settings = await JSON.parse(json);
+        settings = JSON.parse(json);
         apiKey = settings.api.apiKey;
         campaignUrl = settings.api.endpoints.find(({ name }) => name === "campaign_events").url;
         donationsUrl = settings.api.endpoints.find(({ name }) => name === "donations").url;
@@ -107,7 +107,6 @@
             : sounds.toLowerCase() === "true";
             
             // Get user choice to enable or disable animations. Default is enabled.
-        
         animations = !animations || !animations.trim()
             ? settings.defaults.animations
             : animations.toLowerCase() === "true";
@@ -134,7 +133,7 @@
 
     async function StoreSetting(setting) {
         eval(`${setting.name} = setting.checked`);
-
+        
         if (setting.name === "sounds") {
             audioEnabled = setting.checked;
         } else {
